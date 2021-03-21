@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "backend side of application",
   "main": "index.js",
-  "type": "module",
+
   "scripts": {
     "jest": "./node_modules/.bin/jest",
-    "test": "jest"
+    "test": "jest",
+    "start": "ts-node index.ts",
+    "initDB": "ts-node database/initialiseDB.ts"
   },
   "author": "",
   "license": "ISC",

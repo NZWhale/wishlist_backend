@@ -1,6 +1,6 @@
 import generateHelloMessage from "./generateHelloMessage"
 
-const statusHandler = (req, res) => {
+const statusHandler = (req: any, res: any) => {
     res.status(200).send(generateHelloMessage())
 }
 
