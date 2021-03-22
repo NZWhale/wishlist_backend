@@ -14,7 +14,7 @@ export interface IRoomRow {
 export interface IUserRow {
     user_id: string
     email: string
-    wishes_id: string
+    wishes_id: string[] | null
 }
 
 export interface IWishesRow {
