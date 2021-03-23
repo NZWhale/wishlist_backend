@@ -23,13 +23,25 @@ async function initialiseDB() {
                     fs.writeFile(databasePath, JSON.stringify(data), (err: Error) => {
                         if (err) return reject(err)
                         console.log("Data has been saved!")
+                        return resolve(data);
                     })
-                    return resolve(data);
                 })
             }
             fs.readFile(databasePath, { encoding: 'utf8' }, (err: Error, data: IWishListDb) => {
-                if (err) return reject(err);
-                return resolve(data);
+                if (err) {
+                    const data: IWishListDb = {
+                        "rooms": [],
+                        "users": [],
+                        "sessions": [],
+                        "wishes": [],
+                        "authRequests": []
+                    }
+                    fs.writeFile(databasePath, JSON.stringify(data), (err: Error) => {
+                        if (err) return reject(err)
+                        console.log("Data has been saved!")
+                        return resolve(data);
+                    })
+                }
             })
         })
     })

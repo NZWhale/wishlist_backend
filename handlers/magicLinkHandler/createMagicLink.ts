@@ -6,10 +6,11 @@ import { IAuthRequest, IUserRow, IWishListDb } from '../../interfaces';
 const fs = require('fs')
 const databasePath = './data/WishListDB.json'
 
-const createMagicLink = async (email: string) => {
-    const magicLink = await new Promise((resolve, reject) => {
+const createMagicLink = async (email: string) => new Promise((resolve, reject) => {
         const validationResult = EmailValidator.validate(email)
-        if (!validationResult) return reject(new Error("Email failed validation"))
+        if (!validationResult) {
+            return reject(new Error("Email failed validation"))
+        }
         fs.readFile(databasePath, { encoding: 'utf8' }, (err: Error, data: string) => {
             if (err) return reject(err)
             const wishListData: IWishListDb = JSON.parse(data)
@@ -27,20 +28,23 @@ const createMagicLink = async (email: string) => {
                     token: nanoid()
                 }
                 wishListData.authRequests.push(authRequests)
-                return resolve(magicLinkUrl + authRequests.token)
+                fs.writeFile(databasePath, JSON.stringify(wishListData), (err: Error) => {
+                    if (err) {throw err}
+                    console.log("Data have been saved")
+                    return resolve(magicLinkUrl + authRequests.token)
+                })
             }
             const tokenIndexInArray = wishListData.authRequests.findIndex((authRequest: IAuthRequest) => authRequest.email === email)
             if (tokenIndexInArray) wishListData.authRequests.splice(tokenIndexInArray, 1)
             const authRequests: IAuthRequest = {
                 email: email,
                 token: nanoid()
-            }
+            } 
             wishListData.authRequests.push(authRequests)
             return resolve(magicLinkUrl + authRequests.token)
         })
     })
-    return magicLink
-}
+
 
 
 export default createMagicLink
