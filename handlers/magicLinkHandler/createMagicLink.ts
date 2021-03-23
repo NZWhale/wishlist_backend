@@ -31,8 +31,8 @@ const createMagicLink = async (email: string) => new Promise((resolve, reject) =
                 fs.writeFile(databasePath, JSON.stringify(wishListData), (err: Error) => {
                     if (err) {throw err}
                     console.log("Data have been saved")
-                    return resolve(magicLinkUrl + authRequests.token)
                 })
+                return resolve(magicLinkUrl + authRequests.token)
             }
             const tokenIndexInArray = wishListData.authRequests.findIndex((authRequest: IAuthRequest) => authRequest.email === email)
             if (tokenIndexInArray) wishListData.authRequests.splice(tokenIndexInArray, 1)
@@ -41,6 +41,10 @@ const createMagicLink = async (email: string) => new Promise((resolve, reject) =
                 token: nanoid()
             } 
             wishListData.authRequests.push(authRequests)
+            fs.writeFile(databasePath, JSON.stringify(wishListData), (err: Error) => {
+                if (err) {throw err}
+                console.log("Data have been saved")
+            })
             return resolve(magicLinkUrl + authRequests.token)
         })
     })

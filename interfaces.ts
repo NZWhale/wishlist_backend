@@ -25,7 +25,7 @@ export interface IWishesRow {
 
 export interface ISessionRow {
     user_id: string
-    coockie: string
+    cookie: string
 }
 
 

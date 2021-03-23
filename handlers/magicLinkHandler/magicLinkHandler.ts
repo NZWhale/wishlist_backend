@@ -9,7 +9,6 @@ const magicLinkHandler = (req: any, res: any) => {
         })
         .catch(err => console.log(err))
         console.log(magicLink)
-
 }
 
 

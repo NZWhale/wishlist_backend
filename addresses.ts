@@ -1,5 +1,5 @@
 const hostAddress = '127.0.0.1:3000'
-export const magicLinkUrl = '127.0.0.1:3000/auth?token='
+export const magicLinkUrl = '127.0.0.1:3000/authorise?token='
 
 export const smtpServer = 'smtp-relay.sendinblue.com'
 export const smtpPort = 587
