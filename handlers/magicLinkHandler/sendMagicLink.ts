@@ -1,4 +1,4 @@
-import { smtpLogin, smtpPassword, smtpPort, smtpServer } from "../../addresses";
+import { sender, smtpLogin, smtpPassword, smtpPort, smtpServer } from "../../addresses";
 import createEmailMessage from "./createEmaiMessage";
 
 const nodemailer = require('nodemailer')
@@ -17,7 +17,7 @@ function sendMagicLink(email: string, magicLink: any) {
     });
     let message = createEmailMessage(magicLink)
     let mailDetails = {
-        from: smtpLogin,
+        from: sender,
         to: email,
         subject: "Doobki's Wish List",
         html: message

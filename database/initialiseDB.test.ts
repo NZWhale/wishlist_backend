@@ -12,7 +12,7 @@ describe('initialiseDB function', () => {
             "authRequests": []
         }
         return initialiseDB().then(data => {
-        expect(JSON.stringify(data)).toBe(JSON.stringify(expectedData))
+        expect(data).toEqual(expectedData)
         })
     })
 })
