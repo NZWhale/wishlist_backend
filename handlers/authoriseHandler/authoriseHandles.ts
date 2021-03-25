@@ -1,20 +1,19 @@
+import express from "express"
 import { nanoid } from "nanoid"
+import { cookieAge } from "../../addresses"
 import { ISessionRow, IWishListDb } from "../../interfaces"
 import createAuthRequest from "./createAuthRequest"
 
-const fs = require('fs')
-const databasePath = './data/WishListDB.json'
-
-const authoriseHandler = (req: any, res: any) => {
+const authoriseHandler = (req: express.Request, res: express.Response) => {
     const token = req.query.token
-    if(!token) throw new Error("Token doesn't exist in the request")
+    if(typeof(token) !== 'string' ) throw new Error("Token doesn't exist in the request")
     createAuthRequest(token)
     .then((data: any) => {
         console.log(data)
-        const cookieAge = 24 * 60 * 60 * 1000 * 100
         res.cookie('auth-token', data.cookie, { domain: '127.0.0.1', maxAge: cookieAge, httpOnly: false })
         res.status(200).send()
     })
+    .catch((err: Error) => console.log(err))
 }
 
 
