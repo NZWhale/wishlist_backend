@@ -11,8 +11,8 @@ function sendMagicLink(email: string, magicLink: any) {
         port: smtpPort,
         secure: false,
         auth: {
-            user: "nodemailerwb@gmail.com",
-            pass: "Vw9Hv7qX4bQIdDpc"
+            user: smtpLogin,
+            pass: smtpPassword
         }
     });
     let message = createEmailMessage(magicLink)
