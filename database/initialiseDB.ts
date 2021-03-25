@@ -3,9 +3,6 @@ import { IWishListDb} from "../interfaces"
 const fs = require('fs')
 const dataPath = './data'
 const databasePath = './data/WishListDB.json'
-// const initialiseDB = (db: any, callback:(err: Error, dbName: string) => void) => {
-
-// }
 
 async function initialiseDB() {
     const databaseFile = await new Promise((resolve, reject) => {
