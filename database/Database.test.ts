@@ -2,7 +2,6 @@ import WishListFileDatabase from "./Database";
 import fs from "fs";
 import tmp from "tmp"
 import path from "path"
-import {IWishListDb} from "./interfaces";
 
 jest.mock('nanoid')
 
@@ -22,20 +21,7 @@ describe("createMagicId", () => {
         const fileContent = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
-        const dbContent = JSON.parse(fileContent)
-        expect(dbContent).toEqual({
-            rooms: [],
-            users: [{
-                email: "farglowparty@gmail.com",
-                userId: "xxxxxxxxxx"
-            }],
-            sessions: [],
-            wishes: [],
-            authRequests: [{
-                email: "farglowparty@gmail.com",
-                token: "xxxxxxxxxxxxxxxx"
-            }]
-        } as IWishListDb)
+        expect(fileContent).toMatchSnapshot()
     })
 
     test("should re-create magic id if it exists", () => {
