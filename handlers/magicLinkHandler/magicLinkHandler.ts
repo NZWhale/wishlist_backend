@@ -1,13 +1,13 @@
-import createMagicLink from "./emailIsValid"
 import sendMagicLink from "./sendMagicLink"
+import emailIsValid from "./emailIsValid";
+import {magicLinkUrl} from "../../addresses";
 
-const magicLinkHandler = (req: any, res: any) => {
-        const magicLink = createMagicLink(req.body.email)
+const magicLinkHandler = async (req: any, res: any) => {
+        emailIsValid(req.body.email)
         .then((data: string) => {
-                sendMagicLink(req.body.email, data)
+                sendMagicLink(req.body.email, magicLinkUrl+data)
                 .then(data => {
                         console.log(data)
-                        console.log(magicLink)
                         res.status(200).send()
                 })
                 // console.log(data)
