@@ -7,24 +7,24 @@ export interface IWishListDb {
   }
 
 export interface IRoomRow {
-    user_id: string
-    room_id: string
+    userId: string
+    roomId: string
 }
 
 export interface IUserRow {
-    user_id: string
+    userId: string
     email: string
-    wishes_id: string[] | null
+    wishesId: string[] | null
 }
 
 export interface IWishesRow {
-    wish_id: string
+    wishId: string
     title: string
     description: string
 }
 
 export interface ISessionRow {
-    user_id: string
+    userId: string
     cookie: string
 }
 

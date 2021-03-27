@@ -12,7 +12,7 @@ export const isUserExist = (dbFileContent: IWishListDb, email: string) => {
 }
 
 export const isSessionExist = (dbFileContent: IWishListDb, userId: string) => {
-    const result = dbFileContent.sessions.findIndex((session: ISessionRow) => session.user_id === userId)
+    const result = dbFileContent.sessions.findIndex((session: ISessionRow) => session.userId === userId)
     return result === -1 ? false : true
 }
 
@@ -23,7 +23,7 @@ export const getUserEmailFromDb = (dbFileContent: IWishListDb, token: string) =>
 
 export const getUserIdFromDb = (dbFileContent: IWishListDb, email: string) => {
     const result = dbFileContent.users.find((user: IUserRow) => user.email === email)
-    return result ? result.user_id : ""
+    return result ? result.userId : ""
 }
 
 export const deleteContentFromDb = (dbFileContent: IWishListDb, table: string, email: string) => {
@@ -34,7 +34,7 @@ export const deleteContentFromDb = (dbFileContent: IWishListDb, table: string, e
             break
         case 'sessions':
             const userId = getUserIdFromDb(dbFileContent, email)
-            const sessionIndex = dbFileContent.sessions.findIndex((session: ISessionRow) => session.user_id === userId)
+            const sessionIndex = dbFileContent.sessions.findIndex((session: ISessionRow) => session.userId === userId)
             dbFileContent.sessions.splice(sessionIndex, 1)
             break
         default:

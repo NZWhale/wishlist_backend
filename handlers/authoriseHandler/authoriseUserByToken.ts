@@ -15,7 +15,7 @@ const authoriseUserByToken = async (token: string): Promise<string> => new Promi
         const userId = getUserIdFromDb(wishlistDB, userEmail)
         if (!isSessionExist(wishlistDB, userId)) {
             const newSession: ISessionRow = {
-                user_id: userId,
+                userId: userId,
                 cookie: nanoid()
             }
             wishlistDB.sessions.push(newSession)
@@ -28,7 +28,7 @@ const authoriseUserByToken = async (token: string): Promise<string> => new Promi
         }
         deleteContentFromDb(wishlistDB, 'sessions', userEmail)
         const newSession: ISessionRow = {
-            user_id: userId,
+            userId: userId,
             cookie: nanoid()
         }
         wishlistDB.sessions.push(newSession)
