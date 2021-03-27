@@ -1,4 +1,4 @@
-import { IWishListDb } from "../interfaces"
+import { IWishListDb } from "./interfaces"
 import initialiseDB from "./initialiseDB"
 
 

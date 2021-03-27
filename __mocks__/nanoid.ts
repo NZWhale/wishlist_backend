@@ -1,4 +1,4 @@
 
 export const nanoid = (num: number) => {
-    return Array(num).join("x")
+    return Array(num + 1).join("x")
 }

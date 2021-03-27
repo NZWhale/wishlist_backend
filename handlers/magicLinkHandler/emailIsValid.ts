@@ -1,7 +1,7 @@
 import * as EmailValidator from 'email-validator';
 import { nanoid } from 'nanoid'
 import { magicLinkUrl } from '../../addresses';
-import { IAuthRequest, IUserRow, IWishListDb } from '../../interfaces';
+import { IAuthRequestRow, IUserRow, IWishListDb } from '../../database/interfaces';
 
 const fs = require('fs')
 const databasePath = './data/WishListDB.json'
@@ -20,11 +20,10 @@ const emailIsValid = async (email: string): Promise<string> => new Promise((reso
                 const userId = nanoid(10)
                 const newUser: IUserRow = {
                     userId: userId,
-                    email: email,
-                    wishesId: null
+                    email: email
                 }
                 wishListData.users.push(newUser)
-                const authRequests: IAuthRequest = {
+                const authRequests: IAuthRequestRow = {
                     email: email,
                     token: nanoid()
                 }
@@ -35,9 +34,9 @@ const emailIsValid = async (email: string): Promise<string> => new Promise((reso
                 })
                 return resolve(magicLinkUrl + authRequests.token)
             }
-            const tokenIndexInArray = wishListData.authRequests.findIndex((authRequest: IAuthRequest) => authRequest.email === email)
+            const tokenIndexInArray = wishListData.authRequests.findIndex((authRequest: IAuthRequestRow) => authRequest.email === email)
             if (tokenIndexInArray) wishListData.authRequests.splice(tokenIndexInArray, 1)
-            const authRequests: IAuthRequest = {
+            const authRequests: IAuthRequestRow = {
                 email: email,
                 token: nanoid()
             } 

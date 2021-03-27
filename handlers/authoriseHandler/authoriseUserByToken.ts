@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid"
 import { deleteContentFromDb, getUserEmailFromDb, getUserIdFromDb, isAuthRequestExist, isSessionExist, isUserExist } from "../../database/dbRelatedFunctions"
-import { ISessionRow, IWishListDb } from "../../interfaces"
+import { ISessionRow, IWishListDb } from "../../database/interfaces"
 
 const fs = require('fs')
 const databasePath = './data/WishListDB.json'
