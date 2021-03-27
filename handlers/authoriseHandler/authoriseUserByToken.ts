@@ -1,11 +1,11 @@
 import { nanoid } from "nanoid"
 import { deleteContentFromDb, getUserEmailFromDb, getUserIdFromDb, isAuthRequestExist, isSessionExist, isUserExist } from "../../database/dbRelatedFunctions"
-import { IAuthRequest, ISessionRow, IWishListDb } from "../../interfaces"
+import { ISessionRow, IWishListDb } from "../../interfaces"
 
 const fs = require('fs')
 const databasePath = './data/WishListDB.json'
 
-const authoriseUserByToken = async (token: string) => new Promise((resolve, reject) => {
+const authoriseUserByToken = async (token: string): Promise<string> => new Promise((resolve, reject) => {
     fs.readFile(databasePath, { encoding: 'utf8' }, (err: Error, data: string) => {
         const wishlistDB: IWishListDb = JSON.parse(data)
         if (!isAuthRequestExist(wishlistDB, token)) { return reject(new Error("Token doesn't exist in the authRequest table")) }
@@ -24,7 +24,7 @@ const authoriseUserByToken = async (token: string) => new Promise((resolve, reje
                 if (err) { return reject(err) }
                 console.log("Data have been saved")
             })
-            return resolve(newSession)
+            return resolve(newSession.cookie)
         }
         deleteContentFromDb(wishlistDB, 'sessions', userEmail)
         const newSession: ISessionRow = {
@@ -37,7 +37,7 @@ const authoriseUserByToken = async (token: string) => new Promise((resolve, reje
             if (err) { throw err }
             console.log("Data have been saved")
         })
-        return resolve(newSession)
+        return resolve(newSession.cookie)
 
     })
 })

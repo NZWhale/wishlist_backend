@@ -1,7 +1,8 @@
 import initialiseDB from "./database/initialiseDB";
-import authoriseHandler from "./handlers/authoriseHandler/authoriseHandles";
+import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
 import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
 import statusHandler from "./handlers/statusHandler/statusHandler"
+import { IWishListDb } from "./interfaces";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -12,7 +13,8 @@ const app = express()
 const port = "3000"
 
 initialiseDB()
-.then(data => console.log(data))
+.then((data: IWishListDb) => console.log(data))
+.catch((err: Error) => console.log(err))
 
 app.use(cors({ origin: true, credentials: true }))
 app.use(cookieParser())

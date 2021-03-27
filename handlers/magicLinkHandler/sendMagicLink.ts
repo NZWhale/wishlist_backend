@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer')
 
 
 
-function sendMagicLink(email: string, magicLink: any) {
+const sendMagicLink = (email: string, magicLink: string) => new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
         host: smtpServer,
         port: smtpPort,
@@ -23,21 +23,25 @@ function sendMagicLink(email: string, magicLink: any) {
         html: message
     };
 
-    transporter.verify(function(error: Error, success: any) {
+    transporter.verify(function(error: Error) {
         if (error) {
           console.log(error);
+          return reject(error)
         } else {
           console.log("Server is ready to take our messages");
+          transporter.sendMail(mailDetails, function (err: Error, success: any) {
+              if (err) {
+                  console.log('Error Occurs :', err);
+                  return reject(err)
+              } else {
+                  console.log('Email sent successfully');
+                  return resolve(success)
+              }
+          })
+        //   return resolve(success)
         }
       });
 
-    transporter.sendMail(mailDetails, function (err: Error) {
-        if (err) {
-            console.log('Error Occurs :', err);
-        } else {
-            console.log('Email sent successfully');
-        }
-    })
-}
+})
 
 export default sendMagicLink

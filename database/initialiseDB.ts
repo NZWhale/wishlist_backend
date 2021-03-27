@@ -4,7 +4,7 @@ const fs = require('fs')
 const dataPath = './data'
 const databasePath = './data/WishListDB.json'
 
-const initialiseDB = async () => await new Promise((resolve, reject) => {
+const initialiseDB = async (): Promise<IWishListDb> => await new Promise((resolve, reject) => {
     fs.readdir(dataPath, (err: Error, files: Array<string>) => {
         if (err) {
             fs.mkdir(dataPath, (err: Error) => {
@@ -16,6 +16,7 @@ const initialiseDB = async () => await new Promise((resolve, reject) => {
                     return resolve(data);
                 })
             })
+            return
         }
         fs.readFile(databasePath, { encoding: 'utf8' }, (err: Error, data: string) => {
             if (err) {
@@ -26,7 +27,8 @@ const initialiseDB = async () => await new Promise((resolve, reject) => {
                     return resolve(data);
                 })
             }
-            return resolve(JSON.parse(data));
+            const database: IWishListDb = JSON.parse(data) 
+            return database
         })
     })
 })

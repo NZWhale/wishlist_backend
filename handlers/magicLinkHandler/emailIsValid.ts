@@ -6,13 +6,14 @@ import { IAuthRequest, IUserRow, IWishListDb } from '../../interfaces';
 const fs = require('fs')
 const databasePath = './data/WishListDB.json'
 
-const createMagicLink = async (email: string) => new Promise((resolve, reject) => {
+const emailIsValid = async (email: string): Promise<string> => new Promise((resolve, reject) => {
         const validationResult = EmailValidator.validate(email)
         if (!validationResult) {
             return reject(new Error("Email failed validation"))
         }
         fs.readFile(databasePath, { encoding: 'utf8' }, (err: Error, data: string) => {
             if (err) return reject(err)
+            console.log(data)
             const wishListData: IWishListDb = JSON.parse(data)
             const isUserExist = wishListData.users.find((user: IUserRow) => user.email === email)
             if (!isUserExist) {
@@ -51,4 +52,4 @@ const createMagicLink = async (email: string) => new Promise((resolve, reject) =
 
 
 
-export default createMagicLink
+export default emailIsValid
