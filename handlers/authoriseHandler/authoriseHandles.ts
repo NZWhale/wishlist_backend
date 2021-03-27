@@ -2,7 +2,7 @@ import express from "express"
 import { nanoid } from "nanoid"
 import { cookieAge } from "../../addresses"
 import { ISessionRow, IWishListDb } from "../../interfaces"
-import createAuthRequest from "./createAuthRequest"
+import createAuthRequest from "./authoriseUserByToken"
 
 const authoriseHandler = (req: express.Request, res: express.Response) => {
     const token = req.query.token

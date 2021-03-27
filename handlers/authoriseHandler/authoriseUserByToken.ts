@@ -1,40 +1,38 @@
 import { nanoid } from "nanoid"
+import { deleteContentFromDb, getUserEmailFromDb, getUserIdFromDb, isAuthRequestExist, isSessionExist, isUserExist } from "../../database/dbRelatedFunctions"
 import { IAuthRequest, ISessionRow, IWishListDb } from "../../interfaces"
 
 const fs = require('fs')
 const databasePath = './data/WishListDB.json'
 
-const createAuthRequest = async (token: string) => new Promise((resolve, reject) => {
+const authoriseUserByToken = async (token: string) => new Promise((resolve, reject) => {
     fs.readFile(databasePath, { encoding: 'utf8' }, (err: Error, data: string) => {
         const wishlistDB: IWishListDb = JSON.parse(data)
-        const authRequestIndex = wishlistDB.authRequests.findIndex((authRequest: IAuthRequest) => authRequest.token === token)
-        if (authRequestIndex === -1) { return reject(new Error("Token doesn't exist in the authRequest table")) }
+        if (!isAuthRequestExist(wishlistDB, token)) { return reject(new Error("Token doesn't exist in the authRequest table")) }
         // TODO: We need to validate the token when it expires
-        const userEmail = wishlistDB.authRequests[authRequestIndex].email
-        const userIndex = wishlistDB.users.findIndex(user => user.email === userEmail)
-        if (userIndex === -1) { return reject(new Error("User doesn't exist")) }
-        const userId = wishlistDB.users[userIndex].user_id
-        const sessionIndex = wishlistDB.sessions.findIndex((session: ISessionRow) => session.user_id === userId)
-        if (sessionIndex === -1) {
+        const userEmail = getUserEmailFromDb(wishlistDB, token)
+        if (!isUserExist(wishlistDB, userEmail)) { return reject(new Error("User doesn't exist")) }
+        const userId = getUserIdFromDb(wishlistDB, userEmail)
+        if (!isSessionExist(wishlistDB, userId)) {
             const newSession: ISessionRow = {
                 user_id: userId,
                 cookie: nanoid()
             }
             wishlistDB.sessions.push(newSession)
-            wishlistDB.authRequests.splice(authRequestIndex, 1)
+            deleteContentFromDb(wishlistDB, 'authRequests', userEmail)
             fs.writeFile(databasePath, JSON.stringify(wishlistDB), (err: Error) => {
                 if (err) { return reject(err) }
                 console.log("Data have been saved")
             })
             return resolve(newSession)
         }
-        wishlistDB.sessions.splice(sessionIndex, 1)
+        deleteContentFromDb(wishlistDB, 'sessions', userEmail)
         const newSession: ISessionRow = {
             user_id: userId,
             cookie: nanoid()
         }
         wishlistDB.sessions.push(newSession)
-        wishlistDB.authRequests.splice(authRequestIndex, 1)
+        deleteContentFromDb(wishlistDB, 'authRequests', userEmail)
         fs.writeFile(databasePath, JSON.stringify(wishlistDB), (err: Error) => {
             if (err) { throw err }
             console.log("Data have been saved")
@@ -44,4 +42,4 @@ const createAuthRequest = async (token: string) => new Promise((resolve, reject)
     })
 })
 
-export default createAuthRequest
+export default authoriseUserByToken
