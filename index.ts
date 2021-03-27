@@ -1,3 +1,4 @@
+import { port } from "./addresses";
 import initialiseDB from "./database/initialiseDB";
 import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
 import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
@@ -10,7 +11,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors');
 
 const app = express()
-const port = "3000"
+
 
 initialiseDB()
 .then((data: IWishListDb) => console.log(data))

@@ -7,4 +7,6 @@ export const smtpLogin = 'nodemailerwb@gmail.com'
 export const sender = 'doobkiswishlist@gmail.com'
 export const smtpPassword = 'Vw9Hv7qX4bQIdDpc'
 
+export const port = "3000"
+
 export const cookieAge = 24 * 60 * 60 * 1000 * 100
