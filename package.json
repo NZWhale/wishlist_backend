@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "jest": "./node_modules/.bin/jest",
-    "start": "ts-node index.ts",
-    "initDB": "ts-node handlers/magicLinkHandler/createMagicLink.ts"
+    "test": "jest",
+    "start": "ts-node index.ts"
   },
   "author": "",
   "license": "ISC",

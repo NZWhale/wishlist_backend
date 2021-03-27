@@ -19,9 +19,9 @@ const emailIsValid = async (email: string): Promise<string> => new Promise((reso
             if (!isUserExist) {
                 const userId = nanoid(10)
                 const newUser: IUserRow = {
-                    user_id: userId,
+                    userId: userId,
                     email: email,
-                    wishes_id: null
+                    wishesId: null
                 }
                 wishListData.users.push(newUser)
                 const authRequests: IAuthRequest = {

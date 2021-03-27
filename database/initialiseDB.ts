@@ -1,8 +1,9 @@
 import { IWishListDb } from "../interfaces"
 
 const fs = require('fs')
-const dataPath = './data'
-const databasePath = './data/WishListDB.json'
+const path = require('path')
+const dataPath = path.basename('./data')
+const databasePath = path.basename('./data/WishListDB.json')
 
 const initialiseDB = async (): Promise<IWishListDb> => await new Promise((resolve, reject) => {
     fs.readdir(dataPath, (err: Error, files: Array<string>) => {
