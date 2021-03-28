@@ -1,16 +1,30 @@
+import { port } from "./addresses";
+import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
+import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
+import statusHandler from "./handlers/statusHandler/statusHandler"
+import { IWishListDb } from "./database/interfaces";
+
 const express = require('express')
 const bodyParser = require('body-parser');
-const fs = require('fs')
+const cookieParser = require('cookie-parser')
+const cors = require('cors');
 
 const app = express()
-const port = "3000"
-
-import statusHandler from "./handlers/statusHandler/statusHandler"
 
 
-app.use(bodyParser.json({ limit: '10mb', extended: true }))
+app.use(cors({ origin: true, credentials: true }))
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({
+    extended: true
+  }))
+app.use(bodyParser.json())
 
-app.get('/getfriends', statusHandler)
+app.get('/getstatus', statusHandler)
+
+app.post('/create-magic-link', magicLinkHandler)
+
+app.get('/authorise', authoriseHandler)
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
