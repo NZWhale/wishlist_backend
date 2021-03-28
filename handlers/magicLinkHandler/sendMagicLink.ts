@@ -1,4 +1,4 @@
-import { sender, smtpLogin, smtpPassword, smtpPort, smtpServer } from "../../addresses";
+import { sender, smtpLogin, smtpPassword, smtpPort, smtpServer } from "../../sensetiveData";
 import createEmailMessage from "./createEmaiMessage";
 
 const nodemailer = require('nodemailer')

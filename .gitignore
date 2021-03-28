@@ -3,3 +3,4 @@ data
 .vscode
 ./addresses.ts
 .idea
+sensetiveData.ts
