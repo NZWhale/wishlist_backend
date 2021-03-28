@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer')
 
 
 
-const sendMagicLink = (email: string, magicLink: string) => new Promise((resolve, reject) => {
+const sendMagicLink = (email: string, magicLink: string): Promise<ISuccess> => new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
         host: smtpServer,
         port: smtpPort,
@@ -29,19 +29,30 @@ const sendMagicLink = (email: string, magicLink: string) => new Promise((resolve
           return reject(error)
         } else {
           console.log("Server is ready to take our messages");
-          transporter.sendMail(mailDetails, function (err: Error, success: any) {
+          transporter.sendMail(mailDetails, function (err: Error, success: ISuccess) {
               if (err) {
                   console.log('Error Occurs :', err);
                   return reject(err)
               } else {
-                  console.log('Email sent successfully');
                   return resolve(success)
               }
           })
-        //   return resolve(success)
         }
       });
 
 })
+
+export interface ISuccess {
+    accepted: string[],
+    rejected: [],
+    envelopeTime: number,
+    messageTime: number,
+    messageSize: number,
+    response: string,
+    envelope: Envelope,
+    messageId: string
+
+}
+type Envelope = { from: string, to: string[] }
 
 export default sendMagicLink
