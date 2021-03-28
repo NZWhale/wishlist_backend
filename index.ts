@@ -1,5 +1,4 @@
 import { port } from "./addresses";
-import initialiseDB from "./database/initialiseDB";
 import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
 import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
 import statusHandler from "./handlers/statusHandler/statusHandler"
@@ -12,10 +11,6 @@ const cors = require('cors');
 
 const app = express()
 
-
-initialiseDB()
-.then((data: IWishListDb) => console.log(data))
-.catch((err: Error) => console.log(err))
 
 app.use(cors({ origin: true, credentials: true }))
 app.use(cookieParser())

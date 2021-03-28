@@ -1,7 +1,14 @@
 import fs from "fs"
 import {IWishListDb} from "./interfaces";
-import {createAuthRequestRecord, createEmptyDbContent, createUserRecord} from "./dbRelatedFunctions";
+import {
+    createAuthRequestRecord,
+    createEmptyDbContent, createSessionRecord,
+    createUserRecord, deleteContentFromDb, getUserData, getUserEmailFromAuthRequests, getUserIdFromDb,
+    isAuthRequestExist, isAuthRequestExistByToken, isSessionExist,
+    isUserExist
+} from "./dbRelatedFunctions";
 import { nanoid } from "nanoid";
+import {cookieLength, tokenLength, userIdLength} from "../addresses";
 
 export default class WishListFileDatabase {
     private dbFilePath: string
@@ -12,14 +19,34 @@ export default class WishListFileDatabase {
 
     async createMagicId(userEmail: string): Promise<string> {
         const dbContent = await this.readDbContent()
-        // TODO: move magic id token size to config
-        const magicId = nanoid(16)
+        if(isAuthRequestExist(dbContent, userEmail)){
+            deleteContentFromDb(dbContent, 'authRequests', userEmail)
+        }
+        const magicId = nanoid(tokenLength)
         createAuthRequestRecord(dbContent, magicId, userEmail)
-        // TODO: move user id token size to config
-        const userId = nanoid(10)
-        createUserRecord(dbContent, userId, userEmail)
+        if(!isUserExist(dbContent, userEmail)) {
+            const userId = nanoid(userIdLength)
+            createUserRecord(dbContent, userId, userEmail)
+        }
         await this.writeDbContent(dbContent)
         return magicId
+    }
+
+    async authoriseUser(token: string) {
+        const dbContent = await this.readDbContent()
+        const userEmail = getUserEmailFromAuthRequests(dbContent, token)
+        const userData = getUserData(dbContent, userEmail)
+        if(!userData) throw new Error("User doesn't exist in database")
+        const cookie = nanoid(cookieLength)
+        if(isAuthRequestExistByToken(dbContent, token)){
+            deleteContentFromDb(dbContent, 'authRequests', userEmail)
+        }
+        if(isSessionExist(dbContent, userData.userId)){
+            deleteContentFromDb(dbContent, 'sessions', userEmail)
+        }
+        createSessionRecord(dbContent, userData.userId, cookie)
+        await this.writeDbContent(dbContent)
+        return cookie
     }
 
     private async readDbContent(): Promise<IWishListDb> {

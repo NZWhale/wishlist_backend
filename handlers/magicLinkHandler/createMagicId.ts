@@ -1,13 +1,13 @@
 import * as EmailValidator from 'email-validator';
 import { nanoid } from 'nanoid'
-import { magicLinkUrl } from '../../addresses';
+import {databasePath, magicLinkUrl } from '../../addresses';
 import WishListFileDatabase from '../../database/Database';
 import { IAuthRequestRow, IUserRow, IWishListDb } from '../../database/interfaces';
 
 const fs = require('fs')
-const databasePath = './data/WishListDB.json'
 
-const emailIsValid = async (email: string) => {
+
+const createMagicId = async (email: string) => {
         const validationResult = EmailValidator.validate(email)
         if (!validationResult) {
             throw new Error("Email failed validation")
@@ -19,4 +19,4 @@ const emailIsValid = async (email: string) => {
 
 
 
-export default emailIsValid
+export default createMagicId

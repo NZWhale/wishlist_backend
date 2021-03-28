@@ -1,9 +1,13 @@
 import { IAuthRequestRow, ISessionRow, IUserRow, IWishListDb} from "./interfaces";
+import {stringify} from "ts-jest/dist/utils/json";
 
 type Email = string
 type UserId = string
+type Cookie = string
+type magicId = string
+type Table = 'authRequests' | 'sessions'
 
-export const createAuthRequestRecord = (dbContent: IWishListDb, magicId: string, userEmail: Email) => {
+export const createAuthRequestRecord = (dbContent: IWishListDb, magicId: magicId, userEmail: Email) => {
     const authRequestRecord: IAuthRequestRow = {
         token: magicId,
         email: userEmail
@@ -19,32 +23,48 @@ export const createUserRecord = (dbContent: IWishListDb, userId: UserId, userEma
     dbContent.users.push(userRecord)
 }
 
-export const isAuthRequestExist = (dbFileContent: IWishListDb, token: string) => {
+export const createSessionRecord = (dbContent: IWishListDb, userId: UserId, cookie: Cookie) => {
+    const sessionRecord: ISessionRow = {
+        userId: userId,
+        cookie: cookie
+    }
+    dbContent.sessions.push(sessionRecord)
+}
+
+export const isAuthRequestExist = (dbFileContent: IWishListDb, email: Email) => {
+    const result = dbFileContent.authRequests.findIndex((authRequest: IAuthRequestRow) => authRequest.email === email)
+    return result !== -1
+}
+export const isAuthRequestExistByToken = (dbFileContent: IWishListDb, token: string) => {
     const result = dbFileContent.authRequests.findIndex((authRequest: IAuthRequestRow) => authRequest.token === token)
     return result !== -1
 }
 
-export const isUserExist = (dbFileContent: IWishListDb, email: string) => {
+export const isUserExist = (dbFileContent: IWishListDb, email: Email) => {
     const result = dbFileContent.users.findIndex(user => user.email === email)
     return result !== -1
 }
 
-export const isSessionExist = (dbFileContent: IWishListDb, userId: string) => {
+export const isSessionExist = (dbFileContent: IWishListDb, userId: UserId) => {
     const result = dbFileContent.sessions.findIndex((session: ISessionRow) => session.userId === userId)
     return result !== -1
 }
 
-export const getUserEmailFromDb = (dbFileContent: IWishListDb, token: string) => {
+export const getUserEmailFromAuthRequests = (dbFileContent: IWishListDb, token: string) => {
     const result = dbFileContent.authRequests.find((authRequest: IAuthRequestRow) => authRequest.token === token)
     return result ? result.email : ""
 }
 
-export const getUserIdFromDb = (dbFileContent: IWishListDb, email: string) => {
+export const getUserIdFromDb = (dbFileContent: IWishListDb, email: Email) => {
     const result = dbFileContent.users.find((user: IUserRow) => user.email === email)
     return result ? result.userId : ""
 }
 
-export const deleteContentFromDb = (dbFileContent: IWishListDb, table: string, email: string) => {
+export const getUserData = (dbFileContent: IWishListDb, email: Email) => {
+    return dbFileContent.users.find((user: IUserRow) => user.email === email)
+}
+
+export const deleteContentFromDb = (dbFileContent: IWishListDb, table: Table, email: Email) => {
     switch (table) {
         case 'authRequests':
             const authRequestIndex = dbFileContent.authRequests.findIndex((authRequest: IAuthRequestRow) => authRequest.email === email)

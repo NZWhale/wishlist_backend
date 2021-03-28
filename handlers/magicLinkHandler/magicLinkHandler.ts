@@ -1,9 +1,9 @@
 import sendMagicLink, {ISuccess} from "./sendMagicLink"
-import emailIsValid from "./emailIsValid";
+import createMagicId from "./createMagicId";
 import {magicLinkUrl} from "../../addresses";
 
 const magicLinkHandler = async (req: any, res: any) => {
-        emailIsValid(req.body.email)
+    createMagicId(req.body.email)
         .then((data: string) => {
                 sendMagicLink(req.body.email, magicLinkUrl+data)
                 .then((data: ISuccess) => {
