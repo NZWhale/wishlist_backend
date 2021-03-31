@@ -2,7 +2,6 @@ import { port } from "./addresses";
 import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
 import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
 import statusHandler from "./handlers/statusHandler/statusHandler"
-import { IWishListDb } from "./database/interfaces";
 
 const express = require('express')
 const bodyParser = require('body-parser');
