@@ -1,5 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`authoriseUser should delete authorise request and create user session 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"farglowparty@gmail.com\\"
+    }
+  ],
+  \\"sessions\\": [],
+  \\"wishes\\": [],
+  \\"authRequests\\": [
+    {
+      \\"token\\": \\"xxxxxxxxxxxxxxxx\\",
+      \\"email\\": \\"farglowparty@gmail.com\\"
+    }
+  ]
+}"
+`;
+
+exports[`authoriseUser should delete authorise request and create user session 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"farglowparty@gmail.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
+}"
+`;
+
 exports[`createMagicId should create new user entity it doesn't exist 1`] = `
 "{
   \\"rooms\\": [],
