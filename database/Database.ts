@@ -2,12 +2,22 @@ import fs from "fs"
 import {IWishListDb} from "./interfaces";
 import {
     createAuthRequestRecord,
-    createEmptyDbContent, createNewWishRecord, createSessionRecord,
-    createUserRecord, deleteContentFromDb, getUserData, getUserEmailFromAuthRequests, getUserIdByCookie,
-    isAuthRequestExist, isAuthRequestExistByToken, isSessionExist,
-    isUserExist
+    createEmptyDbContent,
+    createNewWishRecord,
+    createSessionRecord,
+    createUserRecord,
+    deleteContentFromDb,
+    deleteWishRecord,
+    getUserData,
+    getUserEmailFromAuthRequests,
+    getUserIdByCookie,
+    isAuthRequestExist,
+    isAuthRequestExistByToken,
+    isSessionExist,
+    isUserExist,
+    isWishExist
 } from "./dbRelatedFunctions";
-import { nanoid } from "nanoid";
+import {nanoid} from "nanoid";
 import {cookieLength, tokenLength, userIdLength} from "../addresses";
 
 export default class WishListFileDatabase {
@@ -19,12 +29,12 @@ export default class WishListFileDatabase {
 
     async createMagicId(userEmail: string): Promise<string> {
         const dbContent = await this.readDbContent()
-        if(isAuthRequestExist(dbContent, userEmail)){
+        if (isAuthRequestExist(dbContent, userEmail)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
         const magicId = nanoid(tokenLength)
         createAuthRequestRecord(dbContent, magicId, userEmail)
-        if(!isUserExist(dbContent, userEmail)) {
+        if (!isUserExist(dbContent, userEmail)) {
             const userId = nanoid(userIdLength)
             createUserRecord(dbContent, userId, userEmail)
         }
@@ -36,12 +46,12 @@ export default class WishListFileDatabase {
         const dbContent = await this.readDbContent()
         const userEmail = getUserEmailFromAuthRequests(dbContent, token)
         const userData = getUserData(dbContent, userEmail)
-        if(!userData) throw new Error("User doesn't exist in database")
+        if (!userData) throw new Error("User doesn't exist in database")
         const cookie = nanoid(cookieLength)
-        if(isAuthRequestExistByToken(dbContent, token)){
+        if (isAuthRequestExistByToken(dbContent, token)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
-        if(isSessionExist(dbContent, userData.userId)){
+        if (isSessionExist(dbContent, userData.userId)) {
             deleteContentFromDb(dbContent, 'sessions', userEmail)
         }
         createSessionRecord(dbContent, userData.userId, cookie)
@@ -52,8 +62,16 @@ export default class WishListFileDatabase {
     async addNewWish(cookie: string, wishTitle: string, wishDescription: string) {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
-        if(!userId) throw new Error("User doesn't exist in database")
+        if (!userId) throw new Error("User doesn't exist in database")
         createNewWishRecord(dbContent, userId, wishTitle, wishDescription)
+        await this.writeDbContent(dbContent)
+    }
+
+    async deleteWish(wishId: string) {
+        const dbContent = await this.readDbContent()
+        const wishIndex = isWishExist(dbContent, wishId)
+        if (wishIndex === false) throw new Error("WishRow doesn't exist in database")
+        deleteWishRecord(dbContent, wishIndex)
         await this.writeDbContent(dbContent)
     }
 

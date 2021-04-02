@@ -2,7 +2,7 @@ import express from "express";
 import WishListFileDatabase from "../../database/Database";
 import {databasePath} from "../../addresses";
 
-const createNewWishHandler = (req: express.Request, res: express.Response) => {
+const addNewWishHandler = (req: express.Request, res: express.Response) => {
     const cookie = req.body.cookie
     if(!cookie){
         throw new Error("Cookie doesn't exist")
@@ -25,4 +25,4 @@ const createNewWishHandler = (req: express.Request, res: express.Response) => {
         })
 }
 
-export default createNewWishHandler
+export default addNewWishHandler

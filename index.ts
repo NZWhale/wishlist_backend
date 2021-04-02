@@ -2,7 +2,7 @@ import { port } from "./addresses";
 import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
 import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
 import statusHandler from "./handlers/statusHandler/statusHandler"
-import createNewWishHandler from "./handlers/createNewWishHandler/createNewWishHandler";
+import addNewWishHandler from "./handlers/addNewWishHandler/addNewWishHandler";
 import modifyWishHandler from "./handlers/modifyWishHandler/modifyWishHandler";
 import deleteWishHandler from "./handlers/deleteWishHandler/deleteWishHandler";
 import getAllWishesHandler from "./handlers/getWishesHandler/getWishesHandler";
@@ -33,11 +33,11 @@ app.post('/create-magic-link', magicLinkHandler)
 
 app.post('/authorise', authoriseHandler)
 
-app.post('/addNewWish', createNewWishHandler )
+app.post('/addNewWish', addNewWishHandler )
 
 app.put('/modifyWish', modifyWishHandler)
 
-app.delete('/deleteWish', deleteWishHandler)
+app.post('/deleteWish', deleteWishHandler)
 
 
 

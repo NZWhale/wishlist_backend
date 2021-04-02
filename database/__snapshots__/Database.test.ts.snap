@@ -6,7 +6,7 @@ exports[`addNewWish should create new wish row in the wish table 1`] = `
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ],
   \\"sessions\\": [],
@@ -14,7 +14,7 @@ exports[`addNewWish should create new wish row in the wish table 1`] = `
   \\"authRequests\\": [
     {
       \\"token\\": \\"xxxxxxxxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ]
 }"
@@ -26,7 +26,7 @@ exports[`addNewWish should create new wish row in the wish table 2`] = `
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ],
   \\"sessions\\": [
@@ -53,7 +53,7 @@ exports[`authoriseUser should delete authorise request and create user session 1
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ],
   \\"sessions\\": [],
@@ -61,7 +61,7 @@ exports[`authoriseUser should delete authorise request and create user session 1
   \\"authRequests\\": [
     {
       \\"token\\": \\"xxxxxxxxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ]
 }"
@@ -73,7 +73,7 @@ exports[`authoriseUser should delete authorise request and create user session 2
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ],
   \\"sessions\\": [
@@ -93,7 +93,7 @@ exports[`createMagicId should create new user entity it doesn't exist 1`] = `
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ],
   \\"sessions\\": [],
@@ -101,8 +101,55 @@ exports[`createMagicId should create new user entity it doesn't exist 1`] = `
   \\"authRequests\\": [
     {
       \\"token\\": \\"xxxxxxxxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ]
+}"
+`;
+
+exports[`deleteWish should delete wish row from wishes table 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\"
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`deleteWish should delete wish row from wishes table 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
 }"
 `;
