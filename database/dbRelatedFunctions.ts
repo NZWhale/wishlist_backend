@@ -1,5 +1,6 @@
-import { IAuthRequestRow, ISessionRow, IUserRow, IWishListDb} from "./interfaces";
-import {stringify} from "ts-jest/dist/utils/json";
+import {IAuthRequestRow, ISessionRow, IUserRow, IWishesRow, IWishListDb} from "./interfaces";
+import {nanoid} from "nanoid";
+import {wishIdLength} from "../addresses";
 
 type Email = string
 type UserId = string
@@ -60,6 +61,11 @@ export const getUserIdFromDb = (dbFileContent: IWishListDb, email: Email) => {
     return result ? result.userId : ""
 }
 
+export const getUserIdByCookie = (dbFileContent: IWishListDb, cookie: Cookie) => {
+    const result = dbFileContent.sessions.find((session: ISessionRow) => session.cookie === cookie)
+    return result ? result.userId : ""
+}
+
 export const getUserData = (dbFileContent: IWishListDb, email: Email) => {
     return dbFileContent.users.find((user: IUserRow) => user.email === email)
 }
@@ -80,6 +86,17 @@ export const deleteContentFromDb = (dbFileContent: IWishListDb, table: Table, em
     }
 
 }
+
+export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, title: string, description: string) => {
+    const wishRow: IWishesRow = {
+        userId: userId,
+        wishId: nanoid(wishIdLength),
+        title: title,
+        description: description
+    }
+    dbContent.wishes.push(wishRow)
+}
+
 export const createEmptyDbContent = (): IWishListDb => {
     return {
         "rooms": [],

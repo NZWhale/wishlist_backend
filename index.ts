@@ -2,6 +2,11 @@ import { port } from "./addresses";
 import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
 import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
 import statusHandler from "./handlers/statusHandler/statusHandler"
+import createNewWishHandler from "./handlers/createNewWishHandler/createNewWishHandler";
+import modifyWishHandler from "./handlers/modifyWishHandler/modifyWishHandler";
+import deleteWishHandler from "./handlers/deleteWishHandler/deleteWishHandler";
+import getAllWishesHandler from "./handlers/getWishesHandler/getWishesHandler";
+import getPublicWishesHandler from "./handlers/getPublicWishesHandler/getPublicWishesHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -20,9 +25,20 @@ app.use(bodyParser.json())
 
 app.get('/getstatus', statusHandler)
 
+app.get('/getAllWishes', getAllWishesHandler)
+
+app.get('/getPublicWishes', getPublicWishesHandler)
+
 app.post('/create-magic-link', magicLinkHandler)
 
-app.get('/authorise', authoriseHandler)
+app.post('/authorise', authoriseHandler)
+
+app.post('/addNewWish', createNewWishHandler )
+
+app.put('/modifyWish', modifyWishHandler)
+
+app.delete('/deleteWish', deleteWishHandler)
+
 
 
 app.listen(port, () => {

@@ -1,5 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`addNewWish should create new wish row in the wish table 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"farglowparty@gmail.com\\"
+    }
+  ],
+  \\"sessions\\": [],
+  \\"wishes\\": [],
+  \\"authRequests\\": [
+    {
+      \\"token\\": \\"xxxxxxxxxxxxxxxx\\",
+      \\"email\\": \\"farglowparty@gmail.com\\"
+    }
+  ]
+}"
+`;
+
+exports[`addNewWish should create new wish row in the wish table 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"farglowparty@gmail.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\"
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
 exports[`authoriseUser should delete authorise request and create user session 1`] = `
 "{
   \\"rooms\\": [],

@@ -2,8 +2,8 @@ import fs from "fs"
 import {IWishListDb} from "./interfaces";
 import {
     createAuthRequestRecord,
-    createEmptyDbContent, createSessionRecord,
-    createUserRecord, deleteContentFromDb, getUserData, getUserEmailFromAuthRequests, getUserIdFromDb,
+    createEmptyDbContent, createNewWishRecord, createSessionRecord,
+    createUserRecord, deleteContentFromDb, getUserData, getUserEmailFromAuthRequests, getUserIdByCookie,
     isAuthRequestExist, isAuthRequestExistByToken, isSessionExist,
     isUserExist
 } from "./dbRelatedFunctions";
@@ -47,6 +47,14 @@ export default class WishListFileDatabase {
         createSessionRecord(dbContent, userData.userId, cookie)
         await this.writeDbContent(dbContent)
         return cookie
+    }
+
+    async addNewWish(cookie: string, wishTitle: string, wishDescription: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if(!userId) throw new Error("User doesn't exist in database")
+        createNewWishRecord(dbContent, userId, wishTitle, wishDescription)
+        await this.writeDbContent(dbContent)
     }
 
     private async readDbContent(): Promise<IWishListDb> {
