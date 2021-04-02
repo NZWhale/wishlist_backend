@@ -35,7 +35,7 @@ app.post('/authorise', authoriseHandler)
 
 app.post('/addNewWish', addNewWishHandler )
 
-app.put('/modifyWish', modifyWishHandler)
+app.post('/modifyWish', modifyWishHandler)
 
 app.post('/deleteWish', deleteWishHandler)
 

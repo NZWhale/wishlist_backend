@@ -7,7 +7,7 @@ import {
     createSessionRecord,
     createUserRecord,
     deleteContentFromDb,
-    deleteWishRecord,
+    deleteWishRecord, editWishRecord,
     getUserData,
     getUserEmailFromAuthRequests,
     getUserIdByCookie,
@@ -64,6 +64,14 @@ export default class WishListFileDatabase {
         const userId = getUserIdByCookie(dbContent, cookie)
         if (!userId) throw new Error("User doesn't exist in database")
         createNewWishRecord(dbContent, userId, wishTitle, wishDescription)
+        await this.writeDbContent(dbContent)
+    }
+
+    async editWish(wishId: string, title: string, description: string) {
+        const dbContent = await this.readDbContent()
+        const wishIndex = isWishExist(dbContent, wishId)
+        if (wishIndex === false) throw new Error("WishRow doesn't exist in database")
+        editWishRecord(dbContent, wishIndex, title, description)
         await this.writeDbContent(dbContent)
     }
 

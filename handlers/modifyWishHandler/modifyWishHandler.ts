@@ -2,24 +2,18 @@ import express from "express";
 import WishListFileDatabase from "../../database/Database";
 import {databasePath} from "../../addresses";
 
-const addNewWishHandler = (req: express.Request, res: express.Response) => {
-    const cookie = req.body.cookie
-    if(!cookie){
+const modifyWishHandler = (req: express.Request, res: express.Response) => {
+    const wishId = req.body.wishId
+    if(!wishId){
         throw new Error("Cookie doesn't exist")
     }
     const title = req.body.title
-    if(!title){
-        throw new Error("Title doesn't exist")
-    }
     const description = req.body.description
-    if(!description){
-        throw new Error("Description doesn't exist")
-    }
     const dbInstance = new WishListFileDatabase(databasePath)
-    dbInstance.addNewWish(cookie, title, description)
+    dbInstance.editWish(wishId, title, description)
         .then(() => {
-            console.log('Wish added successfully')
-            res.status(200).send('Wish added successfully')
+            console.log('Wish successfully edited')
+            res.status(200).send('Wish successfully edited')
         })
         .catch((err: Error) => {
             console.error(err)
@@ -27,4 +21,4 @@ const addNewWishHandler = (req: express.Request, res: express.Response) => {
         })
 }
 
-export default addNewWishHandler
+export default modifyWishHandler

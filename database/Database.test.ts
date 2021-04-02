@@ -83,3 +83,21 @@ describe("deleteWish", () => {
         expect(fileContentAfterDeletingWish).toMatchSnapshot()
     })
 })
+
+describe("editWish", () => {
+    test("should edit wish row", async () => {
+        const { db, dbFilePath } = createEmptyTestDatabase()
+        await db.createMagicId("420@chill.com");
+        const cookie = await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        await db.addNewWish(cookie, 'Foo', 'Bar')
+        const fileContentAfterAddingWish = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterAddingWish).toMatchSnapshot()
+        await db.editWish('xxxxxxxx', 'four', 'twenty')
+        const fileContentAfterEditingWish = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterEditingWish).toMatchSnapshot()
+    })
+})

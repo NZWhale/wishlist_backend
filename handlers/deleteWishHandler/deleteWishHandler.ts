@@ -10,9 +10,11 @@ const deleteWishHandler = (req: express.Request, res: express.Response) => {
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.deleteWish(wishId)
         .then(() => {
+            console.log('Wish successfully deleted')
             res.status(200).send('Wish successfully deleted')
         })
         .catch((err: Error) => {
+            console.error(err)
             res.status(500).send(err)
         })
 }

@@ -109,6 +109,16 @@ export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, titl
 export const deleteWishRecord = (dbContent: IWishListDb, wishIndex: number) => {
     dbContent.wishes.splice(wishIndex, 1)
 }
+
+export const editWishRecord = (dbContent: IWishListDb, wishIndex: number, title?: string, description?: string) => {
+    if(title){
+        dbContent.wishes[wishIndex].title = title
+    }
+    if(description){
+        dbContent.wishes[wishIndex].description = description
+    }
+}
+
 export const createEmptyDbContent = (): IWishListDb => {
     return {
         "rooms": [],
