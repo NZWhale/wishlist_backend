@@ -5,18 +5,25 @@ import {databasePath} from "../../addresses";
 const addNewWishHandler = (req: express.Request, res: express.Response) => {
     const cookie = req.body.cookie
     if(!cookie){
-        throw new Error("Cookie doesn't exist")
+        res.status(401).send("Cookie doesn't provide")
+        return
     }
     const title = req.body.title
     if(!title){
-        throw new Error("Title doesn't exist")
+        res.status(401).send("Title doesn't provide")
+        return
     }
     const description = req.body.description
     if(!description){
-        throw new Error("Description doesn't exist")
+        res.status(401).send("Description doesn't provide")
+        return
+    }
+    let isPublic = req.body.isPublic
+    if(!isPublic){
+        isPublic = true
     }
     const dbInstance = new WishListFileDatabase(databasePath)
-    dbInstance.addNewWish(cookie, title, description)
+    dbInstance.addNewWish(cookie, title, description, isPublic)
         .then(() => {
             console.log('Wish added successfully')
             res.status(200).send('Wish added successfully')
