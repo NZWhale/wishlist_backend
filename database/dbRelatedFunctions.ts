@@ -1,4 +1,4 @@
-import {IAuthRequestRow, ISessionRow, IUserRow, IWishesRow, IWishListDb} from "./interfaces";
+import {IAuthRequestRow, ISessionRow, IUserRow, IWishRow, IWishListDb} from "./interfaces";
 import {nanoid} from "nanoid";
 import {wishIdLength} from "../addresses";
 
@@ -20,7 +20,8 @@ export const createAuthRequestRecord = (dbContent: IWishListDb, magicId: magicId
 export const createUserRecord = (dbContent: IWishListDb, userId: UserId, userEmail: Email) => {
     const userRecord: IUserRow = {
         userId: userId,
-        email: userEmail
+        email: userEmail,
+        nickname: null
     }
     dbContent.users.push(userRecord)
 }
@@ -43,8 +44,8 @@ export const isAuthRequestExistByToken = (dbContent: IWishListDb, token: string)
 }
 
 export const isWishExist = (dbContent: IWishListDb, wishId: WishId) => {
-    const result = dbContent.wishes.findIndex((wishRow: IWishesRow) => wishRow.wishId === wishId)
-    if(result === -1){
+    const result = dbContent.wishes.findIndex((wishRow: IWishRow) => wishRow.wishId === wishId)
+    if (result === -1) {
         return false
     }
     return result
@@ -75,8 +76,33 @@ export const getUserIdByCookie = (dbContent: IWishListDb, cookie: Cookie) => {
     return result ? result.userId : ""
 }
 
+export const getUserIdByNickname = (dbContent: IWishListDb, nickname: string) => {
+    const result = dbContent.users.find((user: IUserRow) => user.nickname === nickname)
+    return result ? result.userId : null
+}
+
 export const getUserData = (dbContent: IWishListDb, email: Email) => {
     return dbContent.users.find((user: IUserRow) => user.email === email)
+}
+
+export const getAllWishesOfLoggedInUser = (dbContent: IWishListDb, userId: UserId): IWishRow[] => {
+    const allWishesOfUser: IWishRow[] = []
+    dbContent.wishes.forEach((wish: IWishRow) => {
+        if (wish.userId === userId) {
+            allWishesOfUser.push(wish)
+        }
+    })
+    return allWishesOfUser
+}
+
+export const getPublicWishesByUserId = (dbContent: IWishListDb, userId: string): IWishRow[] => {
+    const publicWishes: IWishRow[] = []
+    dbContent.wishes.forEach((wish: IWishRow) => {
+        if (wish.userId === userId && wish.isPublic) {
+            publicWishes.push(wish)
+        }
+    })
+    return publicWishes
 }
 
 export const deleteContentFromDb = (dbContent: IWishListDb, table: Table, email: Email) => {
@@ -97,12 +123,13 @@ export const deleteContentFromDb = (dbContent: IWishListDb, table: Table, email:
 
 }
 
-export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, title: string, description: string) => {
-    const wishRow: IWishesRow = {
+export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, title: string, description: string, isPublic: boolean) => {
+    const wishRow: IWishRow = {
         userId: userId,
         wishId: nanoid(wishIdLength),
         title: title,
-        description: description
+        description: description,
+        isPublic: isPublic
     }
     dbContent.wishes.push(wishRow)
 }
@@ -111,12 +138,21 @@ export const deleteWishRecord = (dbContent: IWishListDb, wishIndex: number) => {
 }
 
 export const editWishRecord = (dbContent: IWishListDb, wishIndex: number, title?: string, description?: string) => {
-    if(title){
+    if (title) {
         dbContent.wishes[wishIndex].title = title
     }
-    if(description){
+    if (description) {
         dbContent.wishes[wishIndex].description = description
     }
+}
+
+export const setUsername = (dbContent: IWishListDb, userId: UserId, nickname: string) => {
+    dbContent.users.forEach((user: IUserRow) => {
+        if(user.userId === userId){
+            user.nickname = nickname
+            return
+        }
+    })
 }
 
 export const createEmptyDbContent = (): IWishListDb => {

@@ -7,15 +7,15 @@ import {
     createSessionRecord,
     createUserRecord,
     deleteContentFromDb,
-    deleteWishRecord, editWishRecord,
+    deleteWishRecord, editWishRecord, getAllWishesOfLoggedInUser, getPublicWishesByUserId,
     getUserData,
     getUserEmailFromAuthRequests,
-    getUserIdByCookie,
+    getUserIdByCookie, getUserIdByNickname,
     isAuthRequestExist,
     isAuthRequestExistByToken,
     isSessionExist,
     isUserExist,
-    isWishExist
+    isWishExist, setUsername
 } from "./dbRelatedFunctions";
 import {nanoid} from "nanoid";
 import {cookieLength, tokenLength, userIdLength} from "../addresses";
@@ -48,6 +48,7 @@ export default class WishListFileDatabase {
         const userData = getUserData(dbContent, userEmail)
         if (!userData) throw new Error("User doesn't exist in database")
         const cookie = nanoid(cookieLength)
+        console.log(cookie)
         if (isAuthRequestExistByToken(dbContent, token)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
@@ -59,11 +60,33 @@ export default class WishListFileDatabase {
         return cookie
     }
 
-    async addNewWish(cookie: string, wishTitle: string, wishDescription: string) {
+    async setUsername(cookie: string, nickname: string) {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
         if (!userId) throw new Error("User doesn't exist in database")
-        createNewWishRecord(dbContent, userId, wishTitle, wishDescription)
+        setUsername(dbContent, userId, nickname)
+        await this.writeDbContent(dbContent)
+    }
+
+    async getAllWishesOfLoggedInUser(cookie: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) throw new Error("User doesn't exist in database")
+        return getAllWishesOfLoggedInUser(dbContent, userId)
+    }
+
+    async getPublicWishesOfUser(nickname: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByNickname(dbContent, nickname)
+        if (!userId) throw new Error("User doesn't exist in database")
+        return getPublicWishesByUserId(dbContent, userId)
+    }
+
+    async addNewWish(cookie: string, wishTitle: string, wishDescription: string, isPublic: boolean) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) throw new Error("User doesn't exist in database")
+        createNewWishRecord(dbContent, userId, wishTitle, wishDescription, isPublic)
         await this.writeDbContent(dbContent)
     }
 

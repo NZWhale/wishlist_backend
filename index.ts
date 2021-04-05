@@ -5,8 +5,8 @@ import statusHandler from "./handlers/statusHandler/statusHandler"
 import addNewWishHandler from "./handlers/addNewWishHandler/addNewWishHandler";
 import modifyWishHandler from "./handlers/modifyWishHandler/modifyWishHandler";
 import deleteWishHandler from "./handlers/deleteWishHandler/deleteWishHandler";
-import getAllWishesHandler from "./handlers/getWishesHandler/getWishesHandler";
 import getPublicWishesHandler from "./handlers/getPublicWishesHandler/getPublicWishesHandler";
+import getWishesOfLoggedInUserHandler from "./handlers/getWishesOfLoggedInUserHandler/getWishesOfLoggedInUserHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -25,9 +25,9 @@ app.use(bodyParser.json())
 
 app.get('/getstatus', statusHandler)
 
-app.get('/getAllWishes', getAllWishesHandler)
+app.get('/getAllWishes', getWishesOfLoggedInUserHandler)
 
-app.get('/getPublicWishes', getPublicWishesHandler)
+app.get('/getPublicWishes/:nickname', getPublicWishesHandler)
 
 app.post('/create-magic-link', magicLinkHandler)
 

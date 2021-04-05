@@ -40,7 +40,8 @@ exports[`addNewWish should create new wish row in the wish table 2`] = `
       \\"userId\\": \\"xxxxxxxxxx\\",
       \\"wishId\\": \\"xxxxxxxx\\",
       \\"title\\": \\"Foo\\",
-      \\"description\\": \\"Bar\\"
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\":\\"true\\",
     }
   ],
   \\"authRequests\\": []
@@ -127,7 +128,8 @@ exports[`deleteWish should delete wish row from wishes table 1`] = `
       \\"userId\\": \\"xxxxxxxxxx\\",
       \\"wishId\\": \\"xxxxxxxx\\",
       \\"title\\": \\"Foo\\",
-      \\"description\\": \\"Bar\\"
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\":\\"true\\",
     }
   ],
   \\"authRequests\\": []
@@ -174,7 +176,8 @@ exports[`editWish should edit wish row 1`] = `
       \\"userId\\": \\"xxxxxxxxxx\\",
       \\"wishId\\": \\"xxxxxxxx\\",
       \\"title\\": \\"Foo\\",
-      \\"description\\": \\"Bar\\"
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\":\\"true\\",
     }
   ],
   \\"authRequests\\": []
@@ -201,7 +204,93 @@ exports[`editWish should edit wish row 2`] = `
       \\"userId\\": \\"xxxxxxxxxx\\",
       \\"wishId\\": \\"xxxxxxxx\\",
       \\"title\\": \\"four\\",
-      \\"description\\": \\"twenty\\"
+      \\"description\\": \\"twenty\\",
+      \\"isPublic\\":\\"true\\",
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`getWishes should return all wishes of loggedIn user 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\": true
+    },
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Bar\\",
+      \\"description\\": \\"Foo\\",
+      \\"isPublic\\": true
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`getWishes should return public wishes of user 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": \\"FooUser\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\": true
+    },
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Private\\",
+      \\"description\\": \\"Foo\\",
+      \\"isPublic\\": false
+    },
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Bar\\",
+      \\"description\\": \\"Foo\\",
+      \\"isPublic\\": true
+    },
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Private\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\": false
     }
   ],
   \\"authRequests\\": []
