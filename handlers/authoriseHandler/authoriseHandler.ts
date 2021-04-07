@@ -13,7 +13,6 @@ const authoriseHandler = (req: express.Request, res: express.Response) => {
     dbInstance.authoriseUser(token)
         .then((data: string) => {
             console.log('cookie =', data)
-            //TODO: cookie setting works incorrect
             res.cookie('auth-token', data, {domain: '127.0.0.1', maxAge: cookieAge, httpOnly: false})
             res.status(200).send()
         })
