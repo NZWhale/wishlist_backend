@@ -3,7 +3,8 @@ import WishListFileDatabase from "../../database/Database";
 import {databasePath} from "../../addresses";
 
 const addNewWishHandler = (req: express.Request, res: express.Response) => {
-    const cookie = req.body.cookie
+    const cookie = req.cookies['auth-token']
+    console.log(cookie)
     if(!cookie){
         res.status(401).send("Cookie doesn't provide")
         return
