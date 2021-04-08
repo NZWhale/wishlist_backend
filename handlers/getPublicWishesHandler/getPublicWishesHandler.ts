@@ -4,7 +4,7 @@ import {IWishRow} from "../../database/interfaces";
 import express from "express";
 
 const getPublicWishesHandler = (req: express.Request, res: express.Response) => {
-    const nickname = req.params.nickname
+    const nickname = req.params.username
     if (!nickname) {
         res.status(401).send("Username doesn't provide")
         return

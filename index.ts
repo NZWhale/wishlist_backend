@@ -29,7 +29,7 @@ app.get('/getstatus', statusHandler)
 
 app.get('/getAllWishes', getWishesOfLoggedInUserHandler)
 
-app.get('/getPublicWishes/:nickname', getPublicWishesHandler)
+app.get('/getPublicWishes/:username', getPublicWishesHandler)
 
 app.post('/create-magic-link', magicLinkHandler)
 
