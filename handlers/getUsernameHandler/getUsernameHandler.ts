@@ -11,8 +11,11 @@ const getUsernameHandler = (req: express.Request, res: express.Response) => {
     }
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.getUsernameByCookie(cookie)
-        .then((data: string) => {
+        .then((data: string|null) => {
             console.log(data)
+            if(data === null) {
+                res.status(500).send("User doesn't have username" )
+            }
             res.status(200).send(data)
         })
         .catch((err: Error) => {
