@@ -2,6 +2,7 @@ import WishListFileDatabase from "./Database";
 import fs from "fs";
 import tmp from "tmp"
 import path from "path"
+import {setUsername} from "./dbRelatedFunctions";
 
 jest.mock('nanoid')
 
@@ -94,7 +95,7 @@ describe("editWish", () => {
             encoding: "utf-8"
         });
         expect(fileContentAfterAddingWish).toMatchSnapshot()
-        await db.editWish('xxxxxxxx', 'four', 'twenty')
+        await db.editWish('xxxxxxxx', 'four', 'twenty', true)
         const fileContentAfterEditingWish = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
@@ -163,5 +164,22 @@ describe("getWishes", () => {
             }
         ]
         expect(publicWishesOfUser).toEqual(expectedWishes)
+    })
+})
+
+describe("setUsername", () => {
+    test("should set username", async () => {
+        const {db, dbFilePath} = createEmptyTestDatabase()
+        await db.createMagicId("420@chill.com");
+        const cookie = await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        const fileContentAfterCreatingUser = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterCreatingUser).toMatchSnapshot()
+        await db.setUsername(cookie, 'foobar')
+        const fileContentAfterAddingUsername = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterAddingUsername).toMatchSnapshot()
     })
 })
