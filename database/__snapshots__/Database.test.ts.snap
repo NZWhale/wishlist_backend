@@ -162,7 +162,8 @@ exports[`editWish should edit wish row 1`] = `
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"420@chill.com\\"
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": null
     }
   ],
   \\"sessions\\": [
@@ -177,7 +178,7 @@ exports[`editWish should edit wish row 1`] = `
       \\"wishId\\": \\"xxxxxxxx\\",
       \\"title\\": \\"Foo\\",
       \\"description\\": \\"Bar\\",
-      \\"isPublic\\":\\"true\\",
+      \\"isPublic\\": true
     }
   ],
   \\"authRequests\\": []
@@ -190,7 +191,8 @@ exports[`editWish should edit wish row 2`] = `
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"420@chill.com\\"
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": null
     }
   ],
   \\"sessions\\": [
@@ -205,7 +207,7 @@ exports[`editWish should edit wish row 2`] = `
       \\"wishId\\": \\"xxxxxxxx\\",
       \\"title\\": \\"four\\",
       \\"description\\": \\"twenty\\",
-      \\"isPublic\\":\\"true\\",
+      \\"isPublic\\": true
     }
   ],
   \\"authRequests\\": []
@@ -293,6 +295,48 @@ exports[`getWishes should return public wishes of user 1`] = `
       \\"isPublic\\": false
     }
   ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`setUsername should set username 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": null
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`setUsername should set username 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": \\"foobar\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
   \\"authRequests\\": []
 }"
 `;
