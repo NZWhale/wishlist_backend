@@ -137,18 +137,21 @@ export const deleteWishRecord = (dbContent: IWishListDb, wishIndex: number) => {
     dbContent.wishes.splice(wishIndex, 1)
 }
 
-export const editWishRecord = (dbContent: IWishListDb, wishIndex: number, title?: string, description?: string) => {
+export const editWishRecord = (dbContent: IWishListDb, wishIndex: number, title?: string, description?: string, isPublic?: boolean) => {
     if (title) {
         dbContent.wishes[wishIndex].title = title
     }
     if (description) {
         dbContent.wishes[wishIndex].description = description
     }
+    if (isPublic) {
+        dbContent.wishes[wishIndex].isPublic = isPublic
+    }
 }
 
 export const setUsername = (dbContent: IWishListDb, userId: UserId, nickname: string) => {
     dbContent.users.forEach((user: IUserRow) => {
-        if(user.userId === userId){
+        if (user.userId === userId) {
             user.nickname = nickname
             return
         }

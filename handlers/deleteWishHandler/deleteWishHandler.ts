@@ -4,6 +4,7 @@ import {databasePath} from "../../addresses";
 
 const deleteWishHandler = (req: express.Request, res: express.Response) => {
     const wishId = req.body.wishId
+    console.log(req.body)
     if(!wishId){
         res.status(500).send("WishId doesn't exist in request")
         return

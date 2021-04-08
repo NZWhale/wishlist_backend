@@ -20,9 +20,6 @@ const addNewWishHandler = (req: express.Request, res: express.Response) => {
         return
     }
     let isPublic = req.body.isPublic
-    if(!isPublic){
-        isPublic = true
-    }
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.addNewWish(cookie, title, description, isPublic)
         .then(() => {
