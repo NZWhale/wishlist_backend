@@ -7,6 +7,7 @@ import modifyWishHandler from "./handlers/modifyWishHandler/modifyWishHandler";
 import deleteWishHandler from "./handlers/deleteWishHandler/deleteWishHandler";
 import getPublicWishesHandler from "./handlers/getPublicWishesHandler/getPublicWishesHandler";
 import getWishesOfLoggedInUserHandler from "./handlers/getWishesOfLoggedInUserHandler/getWishesOfLoggedInUserHandler";
+import setUsernameHandler from "./handlers/setUsernameHandler/setUsernameHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -39,6 +40,7 @@ app.post('/modifyWish', modifyWishHandler)
 
 app.post('/deleteWish', deleteWishHandler)
 
+app.post('/setNickname', setUsernameHandler)
 
 
 app.listen(port, () => {
