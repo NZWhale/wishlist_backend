@@ -101,7 +101,7 @@ export default class WishListFileDatabase {
         const dbContent = await this.readDbContent()
         const wishIndex = isWishExist(dbContent, wishId)
         if (wishIndex === false) throw new Error("WishRow doesn't exist in database")
-        editWishRecord(dbContent, wishIndex, title, description, isPublic)
+        editWishRecord(dbContent, wishIndex, isPublic, title, description)
         await this.writeDbContent(dbContent)
     }
 
