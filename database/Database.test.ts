@@ -183,3 +183,18 @@ describe("setUsername", () => {
         expect(fileContentAfterAddingUsername).toMatchSnapshot()
     })
 })
+
+describe("getUsername", () => {
+    test("should return username", async () => {
+        const {db, dbFilePath} = createEmptyTestDatabase()
+        await db.createMagicId("420@chill.com");
+        const cookie = await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        await db.setUsername(cookie, 'foobar')
+        const fileContentAfterAddingUsername = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterAddingUsername).toMatchSnapshot()
+        const username = await db.getUsernameByCookie(cookie)
+        expect(username).toBe('foobar')
+    })
+})

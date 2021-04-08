@@ -10,7 +10,7 @@ import {
     deleteWishRecord, editWishRecord, getAllWishesOfLoggedInUser, getPublicWishesByUserId,
     getUserData,
     getUserEmailFromAuthRequests,
-    getUserIdByCookie, getUserIdByNickname,
+    getUserIdByCookie, getUserIdByNickname, getUsernameByUserId,
     isAuthRequestExist,
     isAuthRequestExistByToken,
     isSessionExist,
@@ -66,6 +66,13 @@ export default class WishListFileDatabase {
         if (!userId) throw new Error("User doesn't exist in database")
         setUsername(dbContent, userId, nickname)
         await this.writeDbContent(dbContent)
+    }
+
+    async getUsernameByCookie(cookie: string): Promise<string|null> {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) throw new Error("User doesn't exist in database")
+        return getUsernameByUserId(dbContent, userId)
     }
 
     async getAllWishesOfLoggedInUser(cookie: string) {

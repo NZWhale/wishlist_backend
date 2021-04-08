@@ -214,6 +214,27 @@ exports[`editWish should edit wish row 2`] = `
 }"
 `;
 
+exports[`getUsername should return username 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": \\"foobar\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
+}"
+`;
+
 exports[`getWishes should return all wishes of loggedIn user 1`] = `
 "{
   \\"rooms\\": [],

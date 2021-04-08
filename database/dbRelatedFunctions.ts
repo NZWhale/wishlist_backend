@@ -76,6 +76,11 @@ export const getUserIdByCookie = (dbContent: IWishListDb, cookie: Cookie) => {
     return result ? result.userId : ""
 }
 
+export const getUsernameByUserId = (dbContent: IWishListDb, userId: UserId): string|null => {
+    const username = dbContent.users.find((user: IUserRow) => user.userId === userId)
+    return username ? username.nickname : ""
+}
+
 export const getUserIdByNickname = (dbContent: IWishListDb, nickname: string) => {
     const result = dbContent.users.find((user: IUserRow) => user.nickname === nickname)
     return result ? result.userId : null
