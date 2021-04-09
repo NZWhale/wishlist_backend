@@ -26,11 +26,6 @@ describe("createMagicId", () => {
         });
         expect(fileContent).toMatchSnapshot()
     })
-
-    // test("should re-create magic id if it exists", () => {
-    //     const dbFilePath =createTestDbFile
-    //     const db = createEmptyTestDatabase()
-    // })
 })
 
 describe("authoriseUser", () => {
