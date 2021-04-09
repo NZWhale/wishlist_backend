@@ -15,7 +15,7 @@ import {
     isAuthRequestExistByToken,
     isSessionExist,
     isUserExist,
-    isWishExist, setUsername
+    returnWishIndex, setUsername
 } from "./dbRelatedFunctions";
 import {nanoid} from "nanoid";
 import {cookieLength, tokenLength, userIdLength} from "../addresses";
@@ -99,15 +99,17 @@ export default class WishListFileDatabase {
 
     async editWish(wishId: string, title: string, description: string, isPublic: boolean) {
         const dbContent = await this.readDbContent()
-        const wishIndex = isWishExist(dbContent, wishId)
+        const wishIndex = returnWishIndex(dbContent, wishId)
         if (wishIndex === false) throw new Error("WishRow doesn't exist in database")
         editWishRecord(dbContent, wishIndex, isPublic, title, description)
         await this.writeDbContent(dbContent)
     }
 
-    async deleteWish(wishId: string) {
+    async deleteWish(wishId: string, cookie: string) {
         const dbContent = await this.readDbContent()
-        const wishIndex = isWishExist(dbContent, wishId)
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) throw new Error("User doesn't exist in database")
+        const wishIndex = returnWishIndex(dbContent, wishId)
         if (wishIndex === false) throw new Error("WishRow doesn't exist in database")
         deleteWishRecord(dbContent, wishIndex)
         await this.writeDbContent(dbContent)

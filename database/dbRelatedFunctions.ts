@@ -43,7 +43,7 @@ export const isAuthRequestExistByToken = (dbContent: IWishListDb, token: string)
     return result !== -1
 }
 
-export const isWishExist = (dbContent: IWishListDb, wishId: WishId) => {
+export const returnWishIndex = (dbContent: IWishListDb, wishId: WishId) => {
     const result = dbContent.wishes.findIndex((wishRow: IWishRow) => wishRow.wishId === wishId)
     if (result === -1) {
         return false
