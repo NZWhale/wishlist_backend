@@ -2,7 +2,7 @@ export interface IWishListDb {
     rooms: IRoomRow[],
     users: IUserRow[],
     sessions: ISessionRow[],
-    wishes: IWishesRow[],
+    wishes: IWishRow[],
     authRequests: IAuthRequestRow[]
   }
 
@@ -13,14 +13,16 @@ export interface IRoomRow {
 
 export interface IUserRow {
     userId: string
+    nickname: string | null
     email: string
 }
 
-export interface IWishesRow {
+export interface IWishRow {
     userId: string
     wishId: string
     title: string
     description: string
+    isPublic: boolean
 }
 
 export interface ISessionRow {

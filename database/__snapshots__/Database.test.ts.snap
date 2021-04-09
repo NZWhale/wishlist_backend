@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createMagicId should create new user entity it doesn't exist 1`] = `
+exports[`addNewWish should create new wish row in the wish table 1`] = `
 "{
   \\"rooms\\": [],
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ],
   \\"sessions\\": [],
@@ -14,8 +14,350 @@ exports[`createMagicId should create new user entity it doesn't exist 1`] = `
   \\"authRequests\\": [
     {
       \\"token\\": \\"xxxxxxxxxxxxxxxx\\",
-      \\"email\\": \\"farglowparty@gmail.com\\"
+      \\"email\\": \\"420@chill.com\\"
     }
   ]
+}"
+`;
+
+exports[`addNewWish should create new wish row in the wish table 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\":\\"true\\",
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`authoriseUser should delete authorise request and create user session 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [],
+  \\"wishes\\": [],
+  \\"authRequests\\": [
+    {
+      \\"token\\": \\"xxxxxxxxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ]
+}"
+`;
+
+exports[`authoriseUser should delete authorise request and create user session 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`createMagicId should create new user entity it doesn't exist 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [],
+  \\"wishes\\": [],
+  \\"authRequests\\": [
+    {
+      \\"token\\": \\"xxxxxxxxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ]
+}"
+`;
+
+exports[`deleteWish should delete wish row from wishes table 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\":\\"true\\",
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`deleteWish should delete wish row from wishes table 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`editWish should edit wish row 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": null
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\": true
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`editWish should edit wish row 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": null
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"four\\",
+      \\"description\\": \\"twenty\\",
+      \\"isPublic\\": true
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`getUsername should return username 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": \\"foobar\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`getWishes should return all wishes of loggedIn user 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\": true
+    },
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Bar\\",
+      \\"description\\": \\"Foo\\",
+      \\"isPublic\\": true
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`getWishes should return public wishes of user 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": \\"FooUser\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Foo\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\": true
+    },
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Private\\",
+      \\"description\\": \\"Foo\\",
+      \\"isPublic\\": false
+    },
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Bar\\",
+      \\"description\\": \\"Foo\\",
+      \\"isPublic\\": true
+    },
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"wishId\\": \\"xxxxxxxx\\",
+      \\"title\\": \\"Private\\",
+      \\"description\\": \\"Bar\\",
+      \\"isPublic\\": false
+    }
+  ],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`setUsername should set username 1`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": null
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
+}"
+`;
+
+exports[`setUsername should set username 2`] = `
+"{
+  \\"rooms\\": [],
+  \\"users\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"email\\": \\"420@chill.com\\",
+      \\"nickname\\": \\"foobar\\"
+    }
+  ],
+  \\"sessions\\": [
+    {
+      \\"userId\\": \\"xxxxxxxxxx\\",
+      \\"cookie\\": \\"xxxxxxxxxxxxxxxxxx\\"
+    }
+  ],
+  \\"wishes\\": [],
+  \\"authRequests\\": []
 }"
 `;

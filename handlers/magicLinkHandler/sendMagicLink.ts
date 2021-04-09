@@ -51,7 +51,6 @@ export interface ISuccess {
     response: string,
     envelope: Envelope,
     messageId: string
-
 }
 type Envelope = { from: string, to: string[] }
 

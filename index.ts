@@ -2,7 +2,13 @@ import { port } from "./addresses";
 import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
 import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
 import statusHandler from "./handlers/statusHandler/statusHandler"
-import { IWishListDb } from "./database/interfaces";
+import addNewWishHandler from "./handlers/addNewWishHandler/addNewWishHandler";
+import modifyWishHandler from "./handlers/modifyWishHandler/modifyWishHandler";
+import deleteWishHandler from "./handlers/deleteWishHandler/deleteWishHandler";
+import getPublicWishesHandler from "./handlers/getPublicWishesHandler/getPublicWishesHandler";
+import getWishesOfLoggedInUserHandler from "./handlers/getWishesOfLoggedInUserHandler/getWishesOfLoggedInUserHandler";
+import setUsernameHandler from "./handlers/setUsernameHandler/setUsernameHandler";
+import getUsernameHandler from "./handlers/getUsernameHandler/getUsernameHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -21,9 +27,23 @@ app.use(bodyParser.json())
 
 app.get('/getstatus', statusHandler)
 
+app.get('/getAllWishes', getWishesOfLoggedInUserHandler)
+
+app.get('/getPublicWishes/:username', getPublicWishesHandler)
+
 app.post('/create-magic-link', magicLinkHandler)
 
-app.get('/authorise', authoriseHandler)
+app.post('/authorise', authoriseHandler)
+
+app.post('/addNewWish', addNewWishHandler )
+
+app.post('/modifyWish', modifyWishHandler)
+
+app.post('/deleteWish', deleteWishHandler)
+
+app.post('/setUsername', setUsernameHandler)
+
+app.get('/getUsername', getUsernameHandler)
 
 
 app.listen(port, () => {
