@@ -3,9 +3,10 @@ import createMagicId from "./createMagicId";
 import {magicLinkUrl} from "../../addresses";
 
 const magicLinkHandler = async (req: any, res: any) => {
-    createMagicId(req.body.email)
+    const email = req.body.email.toLowerCase()
+    createMagicId(email)
         .then((data: string) => {
-                sendMagicLink(req.body.email, magicLinkUrl+data)
+                sendMagicLink(email, magicLinkUrl+data)
                 .then((data: ISuccess) => {
                         console.log(data)
                         res.status(200).send()
