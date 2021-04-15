@@ -1,21 +1,31 @@
 import fs from "fs"
 import {IWishListDb} from "./interfaces";
 import {
+    addUserToRoomTable,
     createAuthRequestRecord,
     createEmptyDbContent,
+    createNewRoom,
     createNewWishRecord,
     createSessionRecord,
     createUserRecord,
     deleteContentFromDb,
-    deleteWishRecord, editWishRecord, getAllWishesOfLoggedInUser, getPublicWishesByUserId,
+    deleteWishRecord,
+    editWishRecord,
+    getAllRoomsOfUser,
+    getAllWishesOfLoggedInUser,
+    getPublicWishesByUserId,
+    getRoomIdByCreaterId,
     getUserData,
     getUserEmailFromAuthRequests,
-    getUserIdByCookie, getUserIdByNickname, getUsernameByUserId,
+    getUserIdByCookie,
+    getUserIdByUsername,
+    getUsernameByUserId,
     isAuthRequestExist,
     isAuthRequestExistByToken,
     isSessionExist,
     isUserExist,
-    returnWishIndex, setUsername
+    returnWishIndex,
+    setUsername
 } from "./dbRelatedFunctions";
 import {nanoid} from "nanoid";
 import {cookieLength, tokenLength, userIdLength} from "../addresses";
@@ -68,7 +78,7 @@ export default class WishListFileDatabase {
         await this.writeDbContent(dbContent)
     }
 
-    async getUsernameByCookie(cookie: string): Promise<string|null> {
+    async getUsernameByCookie(cookie: string): Promise<string | null> {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
         if (!userId) throw new Error("User doesn't exist in database")
@@ -84,9 +94,36 @@ export default class WishListFileDatabase {
 
     async getPublicWishesOfUser(nickname: string) {
         const dbContent = await this.readDbContent()
-        const userId = getUserIdByNickname(dbContent, nickname)
+        const userId = getUserIdByUsername(dbContent, nickname)
         if (!userId) throw new Error("User doesn't exist in database")
         return getPublicWishesByUserId(dbContent, userId)
+    }
+
+    async createRoom(cookie: string, roomName: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) throw new Error("User doesn't exist in database")
+        createNewRoom(dbContent, userId, roomName)
+        await this.writeDbContent(dbContent)
+    }
+
+    async addUserToRoom(cookie: string, username: string) {
+        const dbContent = await this.readDbContent()
+        const roomCreatorId = getUserIdByCookie(dbContent, cookie)
+        if (!roomCreatorId) throw new Error("User doesn't exist in database")
+        const roomId = getRoomIdByCreaterId(dbContent, roomCreatorId)
+        if (!roomId) throw new Error("Room doesn't exist in database")
+        const addableUserId = getUserIdByUsername(dbContent, username)
+        if (!addableUserId) throw new Error("User doesn't exist in database")
+        addUserToRoomTable(dbContent, roomId, addableUserId)
+        await this.writeDbContent(dbContent)
+    }
+
+    async getRoomsOfLoggedInUser(cookie: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) throw new Error("User doesn't exist in database")
+        return getAllRoomsOfUser(dbContent, userId)
     }
 
     async addNewWish(cookie: string, wishTitle: string, wishDescription: string, isPublic: boolean) {

@@ -72,7 +72,7 @@ describe("deleteWish", () => {
             encoding: "utf-8"
         });
         expect(fileContentAfterAddingWish).toMatchSnapshot()
-        await db.deleteWish('xxxxxxxx')
+        await db.deleteWish('xxxxxxxx', "xxxxxxxxxxxxxxxx")
         const fileContentAfterDeletingWish = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
@@ -191,5 +191,101 @@ describe("getUsername", () => {
         expect(fileContentAfterAddingUsername).toMatchSnapshot()
         const username = await db.getUsernameByCookie(cookie)
         expect(username).toBe('foobar')
+    })
+})
+
+describe("createRoom", () => {
+    test("should create new room in database", async () => {
+        const {db, dbFilePath} = createEmptyTestDatabase()
+        await db.createMagicId("420@chill.com");
+        await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        const fileContentAfterAuthorise = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterAuthorise).toMatchSnapshot()
+        await db.createRoom("xxxxxxxxxxxxxxxxxx", "DoobkiRoom")
+        const fileContentAfterCreatingRoom = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterCreatingRoom).toMatchSnapshot()
+    })
+})
+
+describe("addUserToRoom", () => {
+    test("should add user to room", async () => {
+        const {db, dbFilePath} = createEmptyTestDatabase()
+        await db.createMagicId("420@chill.com");
+        await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        await db.setUsername("xxxxxxxxxxxxxxxxxx", 'foobar')
+        await db.createMagicId("420@chill.com");
+        await db.createRoom("xxxxxxxxxxxxxxxxxx", "DoobkiRoom")
+        await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        await db.setUsername("xxxxxxxxxxxxxxxxxx", 'barfoo')
+        const fileContentAfterCreatingRoom = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterCreatingRoom).toMatchSnapshot()
+        await db.addUserToRoom("xxxxxxxxxxxxxxxxxx", "barfoo")
+        const fileContentAfterAddingUser = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterAddingUser).toMatchSnapshot()
+    })
+})
+
+describe("getRoomsOfUser", () => {
+    test("should return all rooms of logged in user", async () => {
+        const {db, dbFilePath} = createEmptyTestDatabase()
+        await db.createMagicId("420@chill.com");
+        await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        await db.setUsername("xxxxxxxxxxxxxxxxxx", 'foobar')
+        await db.createMagicId("420@chill.com");
+        await db.createRoom("xxxxxxxxxxxxxxxxxx", "DoobkiRoom")
+        await db.createRoom("xxxxxxxxxxxxxxxxxx", "Job")
+        await db.createRoom("xxxxxxxxxxxxxxxxxx", "Family")
+        const fileContentAfterCreatingRooms = await fs.promises.readFile(dbFilePath, {
+            encoding: "utf-8"
+        });
+        expect(fileContentAfterCreatingRooms).toMatchSnapshot()
+        const expectedRooms = [
+            {
+                creatorId: "xxxxxxxxxx",
+                roomId: "xxxxxxxxxxxx",
+                roomName: "DoobkiRoom",
+                users: [
+                    {
+                        userId: "xxxxxxxxxx",
+                        email: "420@chill.com",
+                        nickname: "foobar"
+                    }
+                ]
+            },
+            {
+                creatorId: "xxxxxxxxxx",
+                roomId: "xxxxxxxxxxxx",
+                roomName: "Job",
+                users: [
+                    {
+                        userId: "xxxxxxxxxx",
+                        email: "420@chill.com",
+                        nickname: "foobar"
+                    }
+                ]
+            },
+            {
+                creatorId: "xxxxxxxxxx",
+                roomId: "xxxxxxxxxxxx",
+                roomName: "Family",
+                users: [
+                    {
+                        userId: "xxxxxxxxxx",
+                        email: "420@chill.com",
+                        nickname: "foobar"
+                    }
+                ]
+            }
+        ]
+        const rooms = await db.getRoomsOfLoggedInUser("xxxxxxxxxxxxxxxxxx")
+        expect(rooms).toEqual(expectedRooms)
     })
 })
