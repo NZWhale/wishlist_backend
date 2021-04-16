@@ -9,6 +9,10 @@ import getPublicWishesHandler from "./handlers/getPublicWishesHandler/getPublicW
 import getWishesOfLoggedInUserHandler from "./handlers/getWishesOfLoggedInUserHandler/getWishesOfLoggedInUserHandler";
 import setUsernameHandler from "./handlers/setUsernameHandler/setUsernameHandler";
 import getUsernameHandler from "./handlers/getUsernameHandler/getUsernameHandler";
+import createRoomHandler from "./handlers/createRoomHandler/createRoomHandler";
+import addUserToRoomHandler from "./handlers/addUserToRoomHandler/addUserToRoomHandler";
+import getAllWishesOfLoggedInUserHandler
+    from "./handlers/getAllWishesOfLoggedInUserHandler/getAllWishesOfLoggedInUserHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -30,6 +34,12 @@ app.get('/getstatus', statusHandler)
 app.get('/getAllWishes', getWishesOfLoggedInUserHandler)
 
 app.get('/getPublicWishes/:username', getPublicWishesHandler)
+
+app.get('/getAllRooms', getAllWishesOfLoggedInUserHandler)
+
+app.post('/createRoom', createRoomHandler)
+
+app.post('/addUserToRoom', addUserToRoomHandler)
 
 app.post('/create-magic-link', magicLinkHandler)
 
