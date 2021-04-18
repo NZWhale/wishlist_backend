@@ -1,16 +1,9 @@
-import WishListFileDatabase from "./Database";
 import fs from "fs";
-import tmp from "tmp"
-import path from "path"
 import {setUsername} from "./dbRelatedFunctions";
+import {createEmptyTestDatabase} from "../testUtils";
 
 jest.mock('nanoid')
 jest.mock("../createRandomId")
-
-const createEmptyTestDatabase = () => {
-    const dbFilePath = path.join(tmp.dirSync().name, "db.json")
-    return {db: new WishListFileDatabase(dbFilePath), dbFilePath}
-}
 
 describe("createMagicId", () => {
     test("should create and return magic ID", async () => {
