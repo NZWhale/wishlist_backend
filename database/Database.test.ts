@@ -5,6 +5,7 @@ import path from "path"
 import {setUsername} from "./dbRelatedFunctions";
 
 jest.mock('nanoid')
+jest.mock("../createRandomId")
 
 const createEmptyTestDatabase = () => {
     const dbFilePath = path.join(tmp.dirSync().name, "db.json")
@@ -15,7 +16,7 @@ describe("createMagicId", () => {
     test("should create and return magic ID", async () => {
         const {db} = createEmptyTestDatabase();
         const magicId = await db.createMagicId("420@chill.com");
-        expect(magicId).toBe("xxxxxxxxxxxxxxxx")
+        expect(magicId).toBe("x420@chill.comxx")
     })
 
     test("should create new user entity it doesn't exist", async () => {
@@ -31,13 +32,13 @@ describe("createMagicId", () => {
 describe("authoriseUser", () => {
     test("should delete authorise request and create user session", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
-        await db.createMagicId("420@chill.com");
+        const magicId = await db.createMagicId("420@chill.com");
         const fileContentAfterCreatingMagicId = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
         expect(fileContentAfterCreatingMagicId).toMatchSnapshot()
-        const cookie = await db.authoriseUser("xxxxxxxxxxxxxxxx")
-        expect(cookie).toBe('xxxxxxxxxxxxxxxxxx')
+        const cookie = await db.authoriseUser(magicId)
+        expect(cookie).toBe('xx420@chill.comxxx')
         const fileContentAfterAuthoriseUser = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
@@ -48,12 +49,12 @@ describe("authoriseUser", () => {
 describe("addNewWish", () => {
     test("should create new wish row in the wishes table", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
-        await db.createMagicId("420@chill.com");
+        const magicId = await db.createMagicId("420@chill.com");
         const fileContentAfterCreatingMagicId = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
         expect(fileContentAfterCreatingMagicId).toMatchSnapshot()
-        const cookie = await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        const cookie = await db.authoriseUser(magicId)
         await db.addNewWish(cookie, 'Foo', 'Bar', true)
         const fileContentAfterAddingWish = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
@@ -65,14 +66,14 @@ describe("addNewWish", () => {
 describe("deleteWish", () => {
     test("should delete wish row from wishes table", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
-        await db.createMagicId("420@chill.com");
-        const cookie = await db.authoriseUser("xxxxxxxxxxxxxxxx")
+        const magicId = await db.createMagicId("420@chill.com");
+        const cookie = await db.authoriseUser(magicId)
         await db.addNewWish(cookie, 'Foo', 'Bar', true)
         const fileContentAfterAddingWish = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
         expect(fileContentAfterAddingWish).toMatchSnapshot()
-        await db.deleteWish('xxxxxxxx', "xxxxxxxxxxxxxxxx")
+        await db.deleteWish('xFooxxxx', cookie)
         const fileContentAfterDeletingWish = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
@@ -214,18 +215,22 @@ describe("createRoom", () => {
 describe("addUserToRoom", () => {
     test("should add user to room", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
-        await db.createMagicId("420@chill.com");
-        await db.authoriseUser("xxxxxxxxxxxxxxxx")
-        await db.setUsername("xxxxxxxxxxxxxxxxxx", 'foobar')
-        await db.createMagicId("420@chill.com");
-        await db.createRoom("xxxxxxxxxxxxxxxxxx", "DoobkiRoom")
-        await db.authoriseUser("xxxxxxxxxxxxxxxx")
-        await db.setUsername("xxxxxxxxxxxxxxxxxx", 'barfoo')
+
+        const magicId1 = await db.createMagicId("420@chill.com");
+        const cookie1 = await db.authoriseUser(magicId1)
+        await db.setUsername(cookie1, 'Vasiliy')
+
+        await db.createRoom(cookie1, "DoobkiRoom")
+
+        const magicId2 = await db.createMagicId("bumpie@gmail.com");
+        const cookie2 = await db.authoriseUser(magicId2)
+        await db.setUsername(cookie2, 'bumpie')
+
         const fileContentAfterCreatingRoom = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
         expect(fileContentAfterCreatingRoom).toMatchSnapshot()
-        await db.addUserToRoom("xxxxxxxxxxxxxxxxxx", "barfoo")
+        await db.addUserToRoom(cookie1, "bumpie")
         const fileContentAfterAddingUser = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
@@ -236,56 +241,20 @@ describe("addUserToRoom", () => {
 describe("getRoomsOfUser", () => {
     test("should return all rooms of logged in user", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
-        await db.createMagicId("420@chill.com");
-        await db.authoriseUser("xxxxxxxxxxxxxxxx")
-        await db.setUsername("xxxxxxxxxxxxxxxxxx", 'foobar')
-        await db.createMagicId("420@chill.com");
-        await db.createRoom("xxxxxxxxxxxxxxxxxx", "DoobkiRoom")
-        await db.createRoom("xxxxxxxxxxxxxxxxxx", "Job")
-        await db.createRoom("xxxxxxxxxxxxxxxxxx", "Family")
+
+        const magicId1 = await db.createMagicId("420@chill.com");
+        const cookie1 = await db.authoriseUser(magicId1)
+        await db.setUsername(cookie1, 'foobar')
+
+        await db.createRoom(cookie1, "DoobkiRoom")
+        await db.createRoom(cookie1, "Job")
+        await db.createRoom(cookie1, "Family")
+
         const fileContentAfterCreatingRooms = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
         expect(fileContentAfterCreatingRooms).toMatchSnapshot()
-        const expectedRooms = [
-            {
-                creatorId: "xxxxxxxxxx",
-                roomId: "xxxxxxxxxxxx",
-                roomName: "DoobkiRoom",
-                users: [
-                    {
-                        userId: "xxxxxxxxxx",
-                        email: "420@chill.com",
-                        nickname: "foobar"
-                    }
-                ]
-            },
-            {
-                creatorId: "xxxxxxxxxx",
-                roomId: "xxxxxxxxxxxx",
-                roomName: "Job",
-                users: [
-                    {
-                        userId: "xxxxxxxxxx",
-                        email: "420@chill.com",
-                        nickname: "foobar"
-                    }
-                ]
-            },
-            {
-                creatorId: "xxxxxxxxxx",
-                roomId: "xxxxxxxxxxxx",
-                roomName: "Family",
-                users: [
-                    {
-                        userId: "xxxxxxxxxx",
-                        email: "420@chill.com",
-                        nickname: "foobar"
-                    }
-                ]
-            }
-        ]
-        const rooms = await db.getRoomsOfLoggedInUser("xxxxxxxxxxxxxxxxxx")
-        expect(rooms).toEqual(expectedRooms)
+        const rooms = await db.getRoomsOfLoggedInUser(cookie1)
+        expect(rooms).toMatchSnapshot()
     })
 })
