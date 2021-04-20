@@ -15,7 +15,7 @@ function createEmailMessage(magicLink: string) {
     <!--[if (mso 16)]><style type="text/css">     a {text-decoration: none;}     </style><![endif]-->
     <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
     <!--[if gte mso 9]><xml> <o:OfficeDocumentSettings> <o:AllowPNG></o:AllowPNG> <o:PixelsPerInch>96</o:PixelsPerInch> </o:OfficeDocumentSettings> </xml><![endif]-->
-    <!--[if !mso]><!-- -->
+    <!--[if !mso]>-->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i" rel="stylesheet">
     <!--<![endif]-->
@@ -532,7 +532,7 @@ function createEmailMessage(magicLink: string) {
                                                                         style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:'playfair display', georgia, 'times new roman', serif;line-height:24px;color:#A9A9A9;font-size:16px">
                                                                         if the button does not work, follow the link
                                                                         manually</p>
-                                                                    <a href='${magicLink}'>
+                                                                    <a href='${magicLink}' target="_blank">
                                                                         ${magicLink}
                                                                     </a>
                                                                 </td>

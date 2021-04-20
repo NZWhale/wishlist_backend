@@ -26,8 +26,8 @@ import {
     returnWishIndex,
     setUsername
 } from "./dbRelatedFunctions";
-import {nanoid} from "nanoid";
 import {cookieLength, tokenLength, userIdLength} from "../addresses";
+import createRandomId from "../createRandomId";
 
 export default class WishListFileDatabase {
     private dbFilePath: string
@@ -41,10 +41,10 @@ export default class WishListFileDatabase {
         if (isAuthRequestExist(dbContent, userEmail)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
-        const magicId = nanoid(tokenLength)
+        const magicId = createRandomId(tokenLength, userEmail)
         createAuthRequestRecord(dbContent, magicId, userEmail)
         if (!isUserExist(dbContent, userEmail)) {
-            const userId = nanoid(userIdLength)
+            const userId = createRandomId(userIdLength, userEmail)
             createUserRecord(dbContent, userId, userEmail)
         }
         await this.writeDbContent(dbContent)
@@ -56,7 +56,8 @@ export default class WishListFileDatabase {
         const userEmail = getUserEmailFromAuthRequests(dbContent, token)
         const userData = getUserData(dbContent, userEmail)
         if (!userData) throw new Error("User doesn't exist in database")
-        const cookie = nanoid(cookieLength)
+        const cookie = createRandomId(cookieLength, token)
+        console.log(cookie)
         if (isAuthRequestExistByToken(dbContent, token)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }

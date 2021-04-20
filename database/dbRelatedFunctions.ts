@@ -1,6 +1,6 @@
 import {IAuthRequestRow, ISessionRow, IUserRow, IWishRow, IWishListDb, IRoomRow} from "./interfaces";
-import {nanoid} from "nanoid";
 import {roomIdLength, wishIdLength} from "../addresses";
+import createRandomId from "../createRandomId";
 
 type Email = string
 type UserId = string
@@ -137,7 +137,7 @@ export const deleteContentFromDb = (dbContent: IWishListDb, table: Table, email:
 export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, title: string, description: string, isPublic: boolean) => {
     const wishRow: IWishRow = {
         userId: userId,
-        wishId: nanoid(wishIdLength),
+        wishId: createRandomId(wishIdLength, title),
         title: title,
         description: description,
         isPublic: isPublic
@@ -173,6 +173,11 @@ export const getUserDataByUserId = (dbContent: IWishListDb, userId: UserId) => {
     return user ? user : undefined
 }
 
+export const getRoomIdByRoomName = (dbContent: IWishListDb, roomName: string) => {
+    const room = dbContent.rooms.find((room: IRoomRow) => room.roomName === roomName)
+    return room ? room.roomId : undefined
+}
+
 export const createNewRoom = (dbContent: IWishListDb, userId: UserId, roomName: string) => {
     const user = getUserDataByUserId(dbContent, userId)
     if (!user) {
@@ -180,7 +185,7 @@ export const createNewRoom = (dbContent: IWishListDb, userId: UserId, roomName: 
     }
     const roomRow: IRoomRow = {
         creatorId: userId,
-        roomId: nanoid(roomIdLength),
+        roomId: createRandomId(roomIdLength, roomName),
         roomName: roomName,
         users: []
     }
