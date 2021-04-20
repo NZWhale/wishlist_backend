@@ -178,6 +178,11 @@ export const getRoomIdByRoomName = (dbContent: IWishListDb, roomName: string) =>
     return room ? room.roomId : undefined
 }
 
+export const getWishIdByWishName = (dbContent: IWishListDb, title: string) => {
+    const wish = dbContent.wishes.find((wish: IWishRow) => wish.title === title)
+    return wish ? wish.wishId : undefined
+}
+
 export const createNewRoom = (dbContent: IWishListDb, userId: UserId, roomName: string) => {
     const user = getUserDataByUserId(dbContent, userId)
     if (!user) {
