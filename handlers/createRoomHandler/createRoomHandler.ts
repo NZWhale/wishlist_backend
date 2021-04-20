@@ -4,9 +4,8 @@ import {databasePath} from "../../addresses";
 
 const createRoomHandler = (req: express.Request, res: express.Response) => {
     const cookie = req.cookies['auth-token']
-    console.log(cookie)
     if (!cookie) {
-        res.status(401).send("Cookie doesn't provide")
+        res.status(401).send("cookie is not provided")
         return
     }
     const roomName = req.body.roomName

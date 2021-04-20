@@ -5,9 +5,8 @@ import express from "express";
 
 const getAllWishesOfLoggedInUserHandler = (req: express.Request, res: express.Response) => {
     const cookie = req.cookies['auth-token']
-    console.log(cookie)
     if (!cookie) {
-        res.status(401).send("Cookie doesn't provide")
+        res.status(401).send("cookie is not provided")
         return
     }
     const dbInstance = new WishListFileDatabase(databasePath)

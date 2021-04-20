@@ -1,12 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`addNewWish should create new wish row in the wish table 1`] = `
+exports[`addNewWish should create new wish row in the wishes table 1`] = `
 "{
   \\"rooms\\": [],
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"420@chill.com\\"
+      \\"email\\": \\"420@chill.com\\",
+      \\"username\\": null
     }
   ],
   \\"sessions\\": [],
@@ -20,13 +21,14 @@ exports[`addNewWish should create new wish row in the wish table 1`] = `
 }"
 `;
 
-exports[`addNewWish should create new wish row in the wish table 2`] = `
+exports[`addNewWish should create new wish row in the wishes table 2`] = `
 "{
   \\"rooms\\": [],
   \\"users\\": [
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
-      \\"email\\": \\"420@chill.com\\"
+      \\"email\\": \\"420@chill.com\\",
+      \\"username\\": null
     }
   ],
   \\"sessions\\": [
@@ -41,7 +43,7 @@ exports[`addNewWish should create new wish row in the wish table 2`] = `
       \\"wishId\\": \\"xxxxxxxx\\",
       \\"title\\": \\"Foo\\",
       \\"description\\": \\"Bar\\",
-      \\"isPublic\\":\\"true\\",
+      \\"isPublic\\": true
     }
   ],
   \\"authRequests\\": []
@@ -59,7 +61,7 @@ exports[`addUserToRoom should add user to room 1`] = `
         {
           \\"userId\\": \\"xxxxxxxxxx\\",
           \\"email\\": \\"420@chill.com\\",
-          \\"nickname\\": \\"foobar\\"
+          \\"username\\": \\"foobar\\"
         }
       ]
     }
@@ -68,7 +70,7 @@ exports[`addUserToRoom should add user to room 1`] = `
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
       \\"email\\": \\"420@chill.com\\",
-      \\"nickname\\": \\"barfoo\\"
+      \\"username\\": \\"barfoo\\"
     }
   ],
   \\"sessions\\": [
@@ -93,12 +95,12 @@ exports[`addUserToRoom should add user to room 2`] = `
         {
           \\"userId\\": \\"xxxxxxxxxx\\",
           \\"email\\": \\"420@chill.com\\",
-          \\"nickname\\": \\"foobar\\"
+          \\"username\\": \\"foobar\\"
         },
         {
           \\"userId\\": \\"xxxxxxxxxx\\",
           \\"email\\": \\"420@chill.com\\",
-          \\"nickname\\": \\"barfoo\\"
+          \\"username\\": \\"barfoo\\"
         }
       ]
     }
@@ -107,7 +109,7 @@ exports[`addUserToRoom should add user to room 2`] = `
     {
       \\"userId\\": \\"xxxxxxxxxx\\",
       \\"email\\": \\"420@chill.com\\",
-      \\"nickname\\": \\"barfoo\\"
+      \\"username\\": \\"barfoo\\"
     }
   ],
   \\"sessions\\": [

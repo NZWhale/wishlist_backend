@@ -14,10 +14,9 @@ import {
     getAllRoomsOfUser,
     getAllWishesOfLoggedInUser,
     getPublicWishesByUserId,
-    getRoomIdByCreaterId,
     getUserData,
     getUserEmailFromAuthRequests,
-    getUserIdByCookie,
+    getUserIdByCookie, getUserIdByEmail,
     getUserIdByUsername,
     getUsernameByUserId,
     isAuthRequestExist,
@@ -58,7 +57,6 @@ export default class WishListFileDatabase {
         const userData = getUserData(dbContent, userEmail)
         if (!userData) throw new Error("User doesn't exist in database")
         const cookie = nanoid(cookieLength)
-        console.log(cookie)
         if (isAuthRequestExistByToken(dbContent, token)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
@@ -107,13 +105,13 @@ export default class WishListFileDatabase {
         await this.writeDbContent(dbContent)
     }
 
-    async addUserToRoom(cookie: string, username: string) {
+    async addUserToRoom(cookie: string, roomId: string, email: string) {
         const dbContent = await this.readDbContent()
         const roomCreatorId = getUserIdByCookie(dbContent, cookie)
         if (!roomCreatorId) throw new Error("User doesn't exist in database")
-        const roomId = getRoomIdByCreaterId(dbContent, roomCreatorId)
-        if (!roomId) throw new Error("Room doesn't exist in database")
-        const addableUserId = getUserIdByUsername(dbContent, username)
+        // const roomId = getRoomIdByCreaterId(dbContent, roomCreatorId)
+        // if (!roomId) throw new Error("Room doesn't exist in database")
+        const addableUserId = getUserIdByEmail(dbContent, email)
         if (!addableUserId) throw new Error("User doesn't exist in database")
         addUserToRoomTable(dbContent, roomId, addableUserId)
         await this.writeDbContent(dbContent)

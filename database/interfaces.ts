@@ -10,12 +10,12 @@ export interface IRoomRow {
     creatorId: string
     roomId: string
     roomName: string
-    users: IUserRow[]
+    users: string[]
 }
 
 export interface IUserRow {
     userId: string
-    nickname: string | null
+    username: string | null
     email: string
 }
 

@@ -4,7 +4,6 @@ import {databasePath} from "../../addresses";
 
 const setUsernameHandler = (req: express.Request, res: express.Response) => {
     const cookie = req.cookies['auth-token']
-    console.log(cookie)
     if (!cookie) {
         res.status(500).send("Cookie doesn't exist")
         return

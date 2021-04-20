@@ -22,7 +22,7 @@ export const createUserRecord = (dbContent: IWishListDb, userId: UserId, userEma
     const userRecord: IUserRow = {
         userId: userId,
         email: userEmail,
-        nickname: null
+        username: null
     }
     dbContent.users.push(userRecord)
 }
@@ -79,13 +79,18 @@ export const getUserIdByCookie = (dbContent: IWishListDb, cookie: Cookie) => {
 
 export const getUsernameByUserId = (dbContent: IWishListDb, userId: UserId): string | null => {
     const username = dbContent.users.find((user: IUserRow) => user.userId === userId)
-    return username ? username.nickname : ""
+    return username ? username.username : null
 }
 
-export const getUserIdByUsername = (dbContent: IWishListDb, nickname: string) => {
-    const result = dbContent.users.find((user: IUserRow) => user.nickname === nickname)
+export const getUserIdByEmail = (dbContent: IWishListDb, email: string) => {
+    const result = dbContent.users.find((user: IUserRow) => user.email === email)
     return result ? result.userId : null
 }
+export const getUserIdByUsername = (dbContent: IWishListDb, username: string) => {
+    const result = dbContent.users.find((user: IUserRow) => user.username === username)
+    return result ? result.userId : null
+}
+
 
 export const getUserData = (dbContent: IWishListDb, email: Email) => {
     return dbContent.users.find((user: IUserRow) => user.email === email)
@@ -157,7 +162,7 @@ export const editWishRecord = (dbContent: IWishListDb, wishIndex: number, isPubl
 export const setUsername = (dbContent: IWishListDb, userId: UserId, nickname: string) => {
     dbContent.users.forEach((user: IUserRow) => {
         if (user.userId === userId) {
-            user.nickname = nickname
+            user.username = nickname
             return
         }
     })
@@ -179,7 +184,7 @@ export const createNewRoom = (dbContent: IWishListDb, userId: UserId, roomName: 
         roomName: roomName,
         users: []
     }
-    roomRow.users.push(user)
+    roomRow.users.push(user.userId)
     dbContent.rooms.push(roomRow)
 }
 
@@ -190,7 +195,7 @@ export const addUserToRoomTable = (dbContent: IWishListDb, roomId: RoomId, addab
     }
     dbContent.rooms.forEach((room: IRoomRow) => {
         if (room.roomId === roomId) {
-            room.users.push(user)
+            room.users.push(user.userId)
         }
     })
 
@@ -204,8 +209,8 @@ export const getRoomIdByCreaterId = (dbContent: IWishListDb, roomCreatorId: User
 export const getAllRoomsOfUser = (dbContent: IWishListDb, userId: UserId) => {
     const allRoomsOfUser: IRoomRow[] = []
     dbContent.rooms.forEach((room: IRoomRow) => {
-        room.users.forEach((user: IUserRow) => {
-            if(user.userId === userId){
+        room.users.forEach((user: string) => {
+            if(user === userId){
                 allRoomsOfUser.push(room)
             }
             })
