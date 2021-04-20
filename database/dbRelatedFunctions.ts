@@ -170,7 +170,7 @@ export const setUsername = (dbContent: IWishListDb, userId: UserId, nickname: st
 
 export const getUserDataByUserId = (dbContent: IWishListDb, userId: UserId) => {
     const user = dbContent.users.find((user: IUserRow) => user.userId === userId)
-    return user ? user : false
+    return user ? user : undefined
 }
 
 export const createNewRoom = (dbContent: IWishListDb, userId: UserId, roomName: string) => {
@@ -203,13 +203,14 @@ export const addUserToRoomTable = (dbContent: IWishListDb, roomId: RoomId, addab
 
 export const getRoomIdByCreaterId = (dbContent: IWishListDb, roomCreatorId: UserId) => {
     const room = dbContent.rooms.find((room: IRoomRow) => room.creatorId === roomCreatorId)
-    return room ? room.roomId : false
+    return room ? room.roomId : undefined
 }
 
 export const getAllRoomsOfUser = (dbContent: IWishListDb, userId: UserId) => {
     const allRoomsOfUser: IRoomRow[] = []
     dbContent.rooms.forEach((room: IRoomRow) => {
         room.users.forEach((user: string) => {
+            console.log(user, userId)
             if(user === userId){
                 allRoomsOfUser.push(room)
             }
