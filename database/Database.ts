@@ -69,11 +69,11 @@ export default class WishListFileDatabase {
         return cookie
     }
 
-    async setUsername(cookie: string, nickname: string) {
+    async setUsername(cookie: string, username: string) {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
         if (!userId) throw new Error("User doesn't exist in database")
-        setUsername(dbContent, userId, nickname)
+        setUsername(dbContent, userId, username)
         await this.writeDbContent(dbContent)
     }
 
@@ -91,9 +91,21 @@ export default class WishListFileDatabase {
         return getAllWishesOfLoggedInUser(dbContent, userId)
     }
 
-    async getPublicWishesOfUser(nickname: string) {
+    async getWishesByUserId(userId: string) {
         const dbContent = await this.readDbContent()
-        const userId = getUserIdByUsername(dbContent, nickname)
+        return getPublicWishesByUserId(dbContent, userId)
+    }
+
+    async getUsernameByUserId(userId: string) {
+        const dbContent = await this.readDbContent()
+        const username = getUsernameByUserId(dbContent, userId)
+        console.log('username', username)
+        return username
+    }
+
+    async getPublicWishesOfUser(username: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByUsername(dbContent, username)
         if (!userId) throw new Error("User doesn't exist in database")
         return getPublicWishesByUserId(dbContent, userId)
     }

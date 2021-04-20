@@ -10,7 +10,7 @@ const setUsernameHandler = (req: express.Request, res: express.Response) => {
     }
     const username = req.body.username
     if(!username){
-        throw new Error("Nickname doesn't exist")
+        throw new Error("Username doesn't exist")
     }
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.setUsername(cookie, username)
