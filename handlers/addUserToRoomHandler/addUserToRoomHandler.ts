@@ -4,18 +4,22 @@ import {databasePath} from "../../addresses";
 
 const addUserToRoomHandler = (req: express.Request, res: express.Response) => {
     const cookie = req.cookies['auth-token']
-    console.log(cookie)
     if (!cookie) {
-        res.status(401).send("Cookie doesn't provide")
+        res.status(401).send("cookie is not provided")
         return
     }
-    const userName = req.body.userName
-    if (!userName) {
-        res.status(401).send("Username doesn't prodive")
+    const roomId = req.body.roomId
+    if (!roomId) {
+        res.status(401).send("room is not provided")
+        return
+    }
+    const email = req.body.email
+    if (!email) {
+        res.status(401).send("email is not provided")
         return
     }
     const dbInstance = new WishListFileDatabase(databasePath)
-    dbInstance.addUserToRoom(cookie, userName)
+    dbInstance.addUserToRoom(cookie, roomId, email)
         .then(() => {
             res.status(200).send('User successful added')
         })
