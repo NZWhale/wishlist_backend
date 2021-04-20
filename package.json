@@ -4,7 +4,6 @@
   "description": "backend side of application",
   "main": "index.js",
   "scripts": {
-    "jest": "./node_modules/.bin/jest",
     "test": "jest",
     "start": "ts-node index.ts"
   },

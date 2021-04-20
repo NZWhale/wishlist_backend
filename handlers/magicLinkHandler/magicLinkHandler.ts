@@ -1,10 +1,12 @@
 import sendMagicLink, {ISuccess} from "./sendMagicLink"
 import createMagicId from "./createMagicId";
-import {magicLinkUrl} from "../../addresses";
+import {databasePath, magicLinkUrl} from "../../addresses";
+import WishListFileDatabase from "../../database/Database";
 
 const magicLinkHandler = async (req: any, res: any) => {
     const email = req.body.email.toLowerCase()
-    createMagicId(email)
+    const dbInstance = new WishListFileDatabase(databasePath)
+    createMagicId(dbInstance, email)
         .then((data: string) => {
                 sendMagicLink(email, magicLinkUrl+data)
                 .then((data: ISuccess) => {

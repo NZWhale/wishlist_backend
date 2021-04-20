@@ -7,13 +7,15 @@ export interface IWishListDb {
   }
 
 export interface IRoomRow {
-    userId: string
+    creatorId: string
     roomId: string
+    roomName: string
+    users: string[]
 }
 
 export interface IUserRow {
     userId: string
-    nickname: string | null
+    username: string | null
     email: string
 }
 
