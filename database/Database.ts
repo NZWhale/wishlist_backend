@@ -26,8 +26,10 @@ import {
     returnWishIndex,
     setUsername
 } from "./dbRelatedFunctions";
-import {cookieLength, tokenLength, userIdLength} from "../addresses";
+import {cookieLength, magicIdLength, userIdLength} from "../addresses";
 import createRandomId from "../createRandomId";
+import {customAlphabet} from "nanoid";
+import {uppercase} from "nanoid-dictionary";
 
 export default class WishListFileDatabase {
     private dbFilePath: string
@@ -41,7 +43,10 @@ export default class WishListFileDatabase {
         if (isAuthRequestExist(dbContent, userEmail)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
-        const magicId = createRandomId(tokenLength, userEmail)
+        const nanoId = customAlphabet(uppercase, magicIdLength)
+        const firstHalfOfId = await nanoId()
+        const secondHalfOfId = await nanoId()
+        const magicId = firstHalfOfId + '-' + secondHalfOfId
         createAuthRequestRecord(dbContent, magicId, userEmail)
         if (!isUserExist(dbContent, userEmail)) {
             const userId = createRandomId(userIdLength, userEmail)
@@ -69,11 +74,11 @@ export default class WishListFileDatabase {
         return cookie
     }
 
-    async setUsername(cookie: string, nickname: string) {
+    async setUsername(cookie: string, username: string) {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
         if (!userId) throw new Error("User doesn't exist in database")
-        setUsername(dbContent, userId, nickname)
+        setUsername(dbContent, userId, username)
         await this.writeDbContent(dbContent)
     }
 
@@ -91,9 +96,21 @@ export default class WishListFileDatabase {
         return getAllWishesOfLoggedInUser(dbContent, userId)
     }
 
-    async getPublicWishesOfUser(nickname: string) {
+    async getWishesByUserId(userId: string) {
         const dbContent = await this.readDbContent()
-        const userId = getUserIdByUsername(dbContent, nickname)
+        return getPublicWishesByUserId(dbContent, userId)
+    }
+
+    async getUsernameByUserId(userId: string) {
+        const dbContent = await this.readDbContent()
+        const username = getUsernameByUserId(dbContent, userId)
+        console.log('username', username)
+        return username
+    }
+
+    async getPublicWishesOfUser(username: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByUsername(dbContent, username)
         if (!userId) throw new Error("User doesn't exist in database")
         return getPublicWishesByUserId(dbContent, userId)
     }

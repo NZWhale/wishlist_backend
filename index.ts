@@ -13,6 +13,8 @@ import createRoomHandler from "./handlers/createRoomHandler/createRoomHandler";
 import addUserToRoomHandler from "./handlers/addUserToRoomHandler/addUserToRoomHandler";
 import getAllWishesOfLoggedInUserHandler
     from "./handlers/getAllWishesOfLoggedInUserHandler/getAllWishesOfLoggedInUserHandler";
+import getWishesByUserIdHandler from "./handlers/getWishesByUserIdHandler/getWishesByUserIdHandler";
+import getUsernameByUserIdHandler from "./handlers/getUsernameByUserIdHandler/getUsernameByUserIdHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -34,6 +36,10 @@ app.get('/getstatus', statusHandler)
 app.get('/getAllWishes', getWishesOfLoggedInUserHandler)
 
 app.get('/getPublicWishes/:username', getPublicWishesHandler)
+
+app.get('/getWishesById/:userId', getWishesByUserIdHandler)
+
+app.get('/getUsernameByUserId/:userId', getUsernameByUserIdHandler)
 
 app.get('/getAllRooms', getAllWishesOfLoggedInUserHandler)
 

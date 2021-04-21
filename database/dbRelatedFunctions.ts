@@ -159,10 +159,10 @@ export const editWishRecord = (dbContent: IWishListDb, wishIndex: number, isPubl
 
 }
 
-export const setUsername = (dbContent: IWishListDb, userId: UserId, nickname: string) => {
+export const setUsername = (dbContent: IWishListDb, userId: UserId, username: string) => {
     dbContent.users.forEach((user: IUserRow) => {
         if (user.userId === userId) {
-            user.username = nickname
+            user.username = username
             return
         }
     })

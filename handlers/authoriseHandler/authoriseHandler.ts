@@ -1,5 +1,5 @@
 import express from "express"
-import {cookieAge, databasePath} from "../../addresses"
+import {cookieAge, databasePath, domainUrl} from "../../addresses"
 import WishListFileDatabase from "../../database/Database";
 
 const authoriseHandler = (req: express.Request, res: express.Response) => {
@@ -13,7 +13,7 @@ const authoriseHandler = (req: express.Request, res: express.Response) => {
     dbInstance.authoriseUser(token)
         .then((data: string) => {
             console.log('cookie =', data)
-            res.cookie('auth-token', data, {domain: '127.0.0.1', maxAge: cookieAge, httpOnly: false})
+            res.cookie('auth-token', data, {domain: domainUrl, maxAge: cookieAge, httpOnly: false})
             res.status(200).send()
         })
         .catch((err: Error) => {
