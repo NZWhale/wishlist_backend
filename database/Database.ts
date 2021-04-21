@@ -26,8 +26,10 @@ import {
     returnWishIndex,
     setUsername
 } from "./dbRelatedFunctions";
-import {cookieLength, tokenLength, userIdLength} from "../addresses";
+import {cookieLength, magicIdLength, userIdLength} from "../addresses";
 import createRandomId from "../createRandomId";
+import {customAlphabet} from "nanoid";
+import {uppercase} from "nanoid-dictionary";
 
 export default class WishListFileDatabase {
     private dbFilePath: string
@@ -41,7 +43,10 @@ export default class WishListFileDatabase {
         if (isAuthRequestExist(dbContent, userEmail)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
-        const magicId = createRandomId(tokenLength, userEmail)
+        const nanoId = customAlphabet(uppercase, magicIdLength)
+        const firstHalfOfId = await nanoId()
+        const secondHalfOfId = await nanoId()
+        const magicId = firstHalfOfId + '-' + secondHalfOfId
         createAuthRequestRecord(dbContent, magicId, userEmail)
         if (!isUserExist(dbContent, userEmail)) {
             const userId = createRandomId(userIdLength, userEmail)

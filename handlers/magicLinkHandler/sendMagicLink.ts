@@ -1,5 +1,5 @@
 import { sender, smtpLogin, smtpPassword, smtpPort, smtpServer } from "../../sensetiveData";
-import createEmailMessage from "./createEmaiMessage";
+import createMessage from "../../createMail";
 
 const nodemailer = require('nodemailer')
 
@@ -15,7 +15,7 @@ const sendMagicLink = (email: string, magicLink: string): Promise<ISuccess> => n
             pass: smtpPassword
         }
     });
-    let message = createEmailMessage(magicLink)
+    let message = createMessage(magicLink)
     let mailDetails = {
         from: sender,
         to: email,
