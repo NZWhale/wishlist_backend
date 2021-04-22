@@ -198,7 +198,7 @@ export const createNewRoom = (dbContent: IWishListDb, userId: UserId, roomName: 
     dbContent.rooms.push(roomRow)
 }
 
-export const addUserToRoomTable = (dbContent: IWishListDb, roomId: RoomId, addableUserId: UserId) => {
+export const addUserToRoom = (dbContent: IWishListDb, roomId: RoomId, addableUserId: UserId) => {
     const user = getUserDataByUserId(dbContent, addableUserId)
     if (!user) {
         throw new Error("User doesn't exist")

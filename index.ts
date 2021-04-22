@@ -15,6 +15,7 @@ import getAllWishesOfLoggedInUserHandler
     from "./handlers/getAllWishesOfLoggedInUserHandler/getAllWishesOfLoggedInUserHandler";
 import getWishesByUserIdHandler from "./handlers/getWishesByUserIdHandler/getWishesByUserIdHandler";
 import getUsernameByUserIdHandler from "./handlers/getUsernameByUserIdHandler/getUsernameByUserIdHandler";
+import addUserViaLinkHandler from "./handlers/addUserViaLinkHandler/addUserViaLinkHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -46,6 +47,8 @@ app.get('/getAllRooms', getAllWishesOfLoggedInUserHandler)
 app.post('/createRoom', createRoomHandler)
 
 app.post('/addUserToRoom', addUserToRoomHandler)
+
+app.post('/addUserViaLink', addUserViaLinkHandler)
 
 app.post('/create-magic-link', magicLinkHandler)
 

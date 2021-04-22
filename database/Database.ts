@@ -1,7 +1,7 @@
 import fs from "fs"
 import {IWishListDb} from "./interfaces";
 import {
-    addUserToRoomTable,
+    addUserToRoom,
     createAuthRequestRecord,
     createEmptyDbContent,
     createNewRoom,
@@ -127,11 +127,9 @@ export default class WishListFileDatabase {
         const dbContent = await this.readDbContent()
         const roomCreatorId = getUserIdByCookie(dbContent, cookie)
         if (!roomCreatorId) throw new Error("User doesn't exist in database")
-        // const roomId = getRoomIdByCreaterId(dbContent, roomCreatorId)
-        // if (!roomId) throw new Error("Room doesn't exist in database")
         const addableUserId = getUserIdByEmail(dbContent, email)
         if (!addableUserId) throw new Error("User doesn't exist in database")
-        addUserToRoomTable(dbContent, roomId, addableUserId)
+        addUserToRoom(dbContent, roomId, addableUserId)
         await this.writeDbContent(dbContent)
     }
 
@@ -147,6 +145,14 @@ export default class WishListFileDatabase {
         const userId = getUserIdByCookie(dbContent, cookie)
         if (!userId) throw new Error("User doesn't exist in database")
         createNewWishRecord(dbContent, userId, wishTitle, wishDescription, isPublic)
+        await this.writeDbContent(dbContent)
+    }
+
+    async addUserToRoomViaLink(cookie: string, roomId: string){
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) throw new Error("User doesn't exist in database")
+        addUserToRoom(dbContent, roomId, userId)
         await this.writeDbContent(dbContent)
     }
 

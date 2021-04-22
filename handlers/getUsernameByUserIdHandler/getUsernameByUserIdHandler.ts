@@ -14,6 +14,7 @@ const getUsernameByUserIdHandler = (req: express.Request, res: express.Response)
             console.log(data)
             if(data === null) {
                 res.status(500).send("User doesn't have username" )
+                return
             }
             res.status(200).send(data)
         })
