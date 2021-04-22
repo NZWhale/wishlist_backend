@@ -127,8 +127,6 @@ export default class WishListFileDatabase {
         const dbContent = await this.readDbContent()
         const roomCreatorId = getUserIdByCookie(dbContent, cookie)
         if (!roomCreatorId) throw new Error("User doesn't exist in database")
-        // const roomId = getRoomIdByCreaterId(dbContent, roomCreatorId)
-        // if (!roomId) throw new Error("Room doesn't exist in database")
         const addableUserId = getUserIdByEmail(dbContent, email)
         if (!addableUserId) throw new Error("User doesn't exist in database")
         addUserToRoom(dbContent, roomId, addableUserId)
