@@ -3,7 +3,7 @@ import {databasePath} from "../../addresses";
 import {IRoomRow} from "../../database/interfaces";
 import express from "express";
 
-const getAllWishesOfLoggedInUserHandler = (req: express.Request, res: express.Response) => {
+const getAllRoomsOfLoggedInUserHandler = (req: express.Request, res: express.Response) => {
     const cookie = req.cookies['auth-token']
     if (!cookie) {
         res.status(401).send("cookie is not provided")
@@ -12,7 +12,6 @@ const getAllWishesOfLoggedInUserHandler = (req: express.Request, res: express.Re
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.getRoomsOfLoggedInUser(cookie)
         .then((data: IRoomRow[]) => {
-            console.log(data)
             res.status(200).send(data)
         })
         .catch((err: Error) => {
@@ -21,4 +20,4 @@ const getAllWishesOfLoggedInUserHandler = (req: express.Request, res: express.Re
         })
 }
 
-export default getAllWishesOfLoggedInUserHandler
+export default getAllRoomsOfLoggedInUserHandler

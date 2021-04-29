@@ -1,4 +1,4 @@
-import sendMagicLink, {ISuccess} from "./sendMagicLink"
+import sendMagicLink from "./sendMagicLink"
 import createMagicId from "./createMagicId";
 import {databasePath} from "../../addresses";
 import WishListFileDatabase from "../../database/Database";
@@ -9,8 +9,7 @@ const magicLinkHandler = async (req: any, res: any) => {
     createMagicId(dbInstance, email)
         .then((data: string) => {
                 sendMagicLink(email, data)
-                .then((data: ISuccess) => {
-                        console.log(data)
+                .then(() => {
                         res.status(200).send()
                 })
                     .catch((err: Error) => {

@@ -62,19 +62,19 @@ export const isSessionExist = (dbContent: IWishListDb, userId: UserId) => {
     return result !== -1
 }
 
-export const getUserEmailFromAuthRequests = (dbContent: IWishListDb, token: string) => {
+export const getUserEmailFromAuthRequests = (dbContent: IWishListDb, token: string): string | null => {
     const result = dbContent.authRequests.find((authRequest: IAuthRequestRow) => authRequest.token === token)
-    return result ? result.email : ""
+    return result ? result.email : null
 }
 
-export const getUserIdFromDb = (dbContent: IWishListDb, email: Email) => {
+export const getUserIdFromDb = (dbContent: IWishListDb, email: Email): string | null => {
     const result = dbContent.users.find((user: IUserRow) => user.email === email)
-    return result ? result.userId : ""
+    return result ? result.userId : null
 }
 
-export const getUserIdByCookie = (dbContent: IWishListDb, cookie: Cookie) => {
+export const getUserIdByCookie = (dbContent: IWishListDb, cookie: Cookie): string | null => {
     const result = dbContent.sessions.find((session: ISessionRow) => session.cookie === cookie)
-    return result ? result.userId : ""
+    return result ? result.userId : null
 }
 
 export const getUsernameByUserId = (dbContent: IWishListDb, userId: UserId): string | null => {
@@ -82,11 +82,11 @@ export const getUsernameByUserId = (dbContent: IWishListDb, userId: UserId): str
     return username ? username.username : null
 }
 
-export const getUserIdByEmail = (dbContent: IWishListDb, email: string) => {
+export const getUserIdByEmail = (dbContent: IWishListDb, email: string): string | null => {
     const result = dbContent.users.find((user: IUserRow) => user.email === email)
     return result ? result.userId : null
 }
-export const getUserIdByUsername = (dbContent: IWishListDb, username: string) => {
+export const getUserIdByUsername = (dbContent: IWishListDb, username: string): string | null => {
     const result = dbContent.users.find((user: IUserRow) => user.username === username)
     return result ? result.userId : null
 }
@@ -134,7 +134,7 @@ export const deleteContentFromDb = (dbContent: IWishListDb, table: Table, email:
 
 }
 
-export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, title: string, description: string, isPublic: boolean) => {
+export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, title: string, description: string, isPublic: boolean | string[]) => {
     const wishRow: IWishRow = {
         userId: userId,
         wishId: createRandomId(wishIdLength, title),
@@ -148,7 +148,7 @@ export const deleteWishRecord = (dbContent: IWishListDb, wishIndex: number) => {
     dbContent.wishes.splice(wishIndex, 1)
 }
 
-export const editWishRecord = (dbContent: IWishListDb, wishIndex: number, isPublic: boolean, title?: string, description?: string) => {
+export const editWishRecord = (dbContent: IWishListDb, wishIndex: number, isPublic: boolean | string[], title?: string, description?: string) => {
     if (title) {
         dbContent.wishes[wishIndex].title = title
     }
@@ -168,19 +168,19 @@ export const setUsername = (dbContent: IWishListDb, userId: UserId, username: st
     })
 }
 
-export const getUserDataByUserId = (dbContent: IWishListDb, userId: UserId) => {
+export const getUserDataByUserId = (dbContent: IWishListDb, userId: UserId): IUserRow | null => {
     const user = dbContent.users.find((user: IUserRow) => user.userId === userId)
-    return user ? user : undefined
+    return user ? user : null
 }
 
-export const getRoomIdByRoomName = (dbContent: IWishListDb, roomName: string) => {
+export const getRoomIdByRoomName = (dbContent: IWishListDb, roomName: string): string | null => {
     const room = dbContent.rooms.find((room: IRoomRow) => room.roomName === roomName)
-    return room ? room.roomId : undefined
+    return room ? room.roomId : null
 }
 
-export const getWishIdByWishName = (dbContent: IWishListDb, title: string) => {
+export const getWishIdByWishName = (dbContent: IWishListDb, title: string): string | null => {
     const wish = dbContent.wishes.find((wish: IWishRow) => wish.title === title)
-    return wish ? wish.wishId : undefined
+    return wish ? wish.wishId : null
 }
 
 export const createNewRoom = (dbContent: IWishListDb, userId: UserId, roomName: string) => {
@@ -203,6 +203,10 @@ export const addUserToRoom = (dbContent: IWishListDb, roomId: RoomId, addableUse
     if (!user) {
         throw new Error("User doesn't exist")
     }
+    const isUserExist = dbContent.rooms.find((room: IRoomRow) => room.users.find((user: string) => user === addableUserId))
+    if(isUserExist){
+        throw new Error('User already in the room')
+    }
     dbContent.rooms.forEach((room: IRoomRow) => {
         if (room.roomId === roomId) {
             room.users.push(user.userId)
@@ -211,16 +215,15 @@ export const addUserToRoom = (dbContent: IWishListDb, roomId: RoomId, addableUse
 
 }
 
-export const getRoomIdByCreaterId = (dbContent: IWishListDb, roomCreatorId: UserId) => {
+export const getRoomIdByCreaterId = (dbContent: IWishListDb, roomCreatorId: UserId): string | null => {
     const room = dbContent.rooms.find((room: IRoomRow) => room.creatorId === roomCreatorId)
-    return room ? room.roomId : undefined
+    return room ? room.roomId : null
 }
 
-export const getAllRoomsOfUser = (dbContent: IWishListDb, userId: UserId) => {
+export const getAllRoomsOfUser = (dbContent: IWishListDb, userId: UserId): IRoomRow[] => {
     const allRoomsOfUser: IRoomRow[] = []
     dbContent.rooms.forEach((room: IRoomRow) => {
         room.users.forEach((user: string) => {
-            console.log(user, userId)
             if(user === userId){
                 allRoomsOfUser.push(room)
             }

@@ -24,7 +24,7 @@ export interface IWishRow {
     wishId: string
     title: string
     description: string
-    isPublic: boolean
+    isPublic: boolean | string[]
 }
 
 export interface ISessionRow {

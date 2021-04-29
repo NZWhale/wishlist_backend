@@ -12,7 +12,6 @@ const getWishesOfLoggedInUserHandler = (req: express.Request, res: express.Respo
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.getAllWishesOfLoggedInUser(cookie)
         .then((data: IWishRow[]) => {
-            // console.log(data)
             res.status(200).send(data)
         })
         .catch((err: Error) => {

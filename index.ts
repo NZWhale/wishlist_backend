@@ -11,8 +11,7 @@ import setUsernameHandler from "./handlers/setUsernameHandler/setUsernameHandler
 import getUsernameHandler from "./handlers/getUsernameHandler/getUsernameHandler";
 import createRoomHandler from "./handlers/createRoomHandler/createRoomHandler";
 import addUserToRoomHandler from "./handlers/addUserToRoomHandler/addUserToRoomHandler";
-import getAllWishesOfLoggedInUserHandler
-    from "./handlers/getAllWishesOfLoggedInUserHandler/getAllWishesOfLoggedInUserHandler";
+import getAllRoomsOfLoggedInUserHandler from "./handlers/getAllRoomsOfLoggedInUserHandler/getAllRoomsOfLoggedInUserHandler";
 import getWishesByUserIdHandler from "./handlers/getWishesByUserIdHandler/getWishesByUserIdHandler";
 import getUsernameByUserIdHandler from "./handlers/getUsernameByUserIdHandler/getUsernameByUserIdHandler";
 import addUserViaLinkHandler from "./handlers/addUserViaLinkHandler/addUserViaLinkHandler";
@@ -42,7 +41,7 @@ app.get('/getWishesById/:userId', getWishesByUserIdHandler)
 
 app.get('/getUsernameByUserId/:userId', getUsernameByUserIdHandler)
 
-app.get('/getAllRooms', getAllWishesOfLoggedInUserHandler)
+app.get('/getAllRooms', getAllRoomsOfLoggedInUserHandler)
 
 app.post('/createRoom', createRoomHandler)
 

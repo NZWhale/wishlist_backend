@@ -12,7 +12,6 @@ const getPublicWishesHandler = (req: express.Request, res: express.Response) => 
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.getPublicWishesOfUser(username)
         .then((data: IWishRow[]) => {
-            console.log(data)
             res.status(200).send(data)
         })
         .catch((err: Error) => {
