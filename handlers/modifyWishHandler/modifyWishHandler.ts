@@ -4,7 +4,6 @@ import {databasePath} from "../../addresses";
 
 const modifyWishHandler = (req: express.Request, res: express.Response) => {
     const wishId = req.body.wishId
-    console.log(req.body)
     if(!wishId){
         throw new Error("WishId doesn't exist")
     }

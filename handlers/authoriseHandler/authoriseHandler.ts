@@ -12,7 +12,6 @@ const authoriseHandler = (req: express.Request, res: express.Response) => {
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.authoriseUser(token)
         .then((data: string) => {
-            console.log('cookie =', data)
             res.cookie('auth-token', data, {domain: domainUrl, maxAge: cookieAge, httpOnly: false})
             res.status(200).send()
         })

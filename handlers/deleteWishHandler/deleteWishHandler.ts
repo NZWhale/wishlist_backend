@@ -9,7 +9,6 @@ const deleteWishHandler = (req: express.Request, res: express.Response) => {
         res.status(401).send("cookie is not provided")
         return
     }
-    console.log(req.body)
     if(!wishId){
         res.status(500).send("WishId doesn't exist in request")
         return

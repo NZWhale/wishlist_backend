@@ -59,10 +59,12 @@ export default class WishListFileDatabase {
     async authoriseUser(token: string) {
         const dbContent = await this.readDbContent()
         const userEmail = getUserEmailFromAuthRequests(dbContent, token)
+        if(!userEmail){
+            throw new Error('token is invalid')
+        }
         const userData = getUserData(dbContent, userEmail)
         if (!userData) throw new Error("User doesn't exist in database")
         const cookie = createRandomId(cookieLength, token)
-        console.log(cookie)
         if (isAuthRequestExistByToken(dbContent, token)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
@@ -88,7 +90,7 @@ export default class WishListFileDatabase {
         if (!userId) throw new Error("User doesn't exist in database")
         return getUsernameByUserId(dbContent, userId)
     }
-
+    
     async getAllWishesOfLoggedInUser(cookie: string) {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
@@ -103,9 +105,7 @@ export default class WishListFileDatabase {
 
     async getUsernameByUserId(userId: string) {
         const dbContent = await this.readDbContent()
-        const username = getUsernameByUserId(dbContent, userId)
-        console.log('username', username)
-        return username
+        return getUsernameByUserId(dbContent, userId)
     }
 
     async getPublicWishesOfUser(username: string) {
@@ -156,7 +156,7 @@ export default class WishListFileDatabase {
         await this.writeDbContent(dbContent)
     }
 
-    async editWish(wishId: string, title: string, description: string, isPublic: boolean) {
+    async editWish(wishId: string, title: string, description: string, isPublic: boolean | string[]) {
         const dbContent = await this.readDbContent()
         const wishIndex = returnWishIndex(dbContent, wishId)
         if (wishIndex === false) throw new Error("WishRow doesn't exist in database")
