@@ -18,11 +18,14 @@ export const createAuthRequestRecord = (dbContent: IWishListDb, magicId: MagicId
     dbContent.authRequests.push(authRequestRecord)
 }
 
-export const createUserRecord = (dbContent: IWishListDb, userId: UserId, userEmail: Email) => {
+export const createUserRecord = (dbContent: IWishListDb, userId: UserId, userEmail: Email, isEmailConfirmed: boolean, password?: string, salt?: string) => {
     const userRecord: IUserRow = {
         userId: userId,
         email: userEmail,
-        username: null
+        username: null,
+        isEmailConfirmed: isEmailConfirmed,
+        password: password?password:null,
+        passwordSalt: salt?salt:null
     }
     dbContent.users.push(userRecord)
 }
@@ -106,7 +109,13 @@ export const getAllWishesOfLoggedInUser = (dbContent: IWishListDb, userId: UserI
     return allWishesOfUser
 }
 
-export const getPublicWishesByUserId = (dbContent: IWishListDb, userId: string): IWishRow[] => {
+export const isEmailExistInDb = (dbContent: IWishListDb, email: Email): boolean => {
+    const isEmailExist = dbContent.users.find(user => user.email === email)
+    console.log(isEmailExist)
+    return !!isEmailExist
+}
+
+export const getPublicWishesByUserId = (dbContent: IWishListDb, userId: UserId): IWishRow[] => {
     const publicWishes: IWishRow[] = []
     dbContent.wishes.forEach((wish: IWishRow) => {
         if (wish.userId === userId && wish.isPublic) {
@@ -114,6 +123,16 @@ export const getPublicWishesByUserId = (dbContent: IWishListDb, userId: string):
         }
     })
     return publicWishes
+}
+
+export const deleteSessionFromDb = (dbContent: IWishListDb, userId: UserId) => {
+    const sessionIndex = dbContent.sessions.findIndex((session: ISessionRow) => session.userId === userId)
+    dbContent.sessions.splice(sessionIndex, 1)
+}
+
+export const deleteAuthRequestFromTable = (dbContent: IWishListDb, email: Email) => {
+    const authRequestIndex = dbContent.authRequests.findIndex((authRequest: IAuthRequestRow) => authRequest.email === email)
+    dbContent.authRequests.splice(authRequestIndex, 1)
 }
 
 export const deleteContentFromDb = (dbContent: IWishListDb, table: Table, email: Email) => {
@@ -168,6 +187,16 @@ export const setUsername = (dbContent: IWishListDb, userId: UserId, username: st
     })
 }
 
+export const setEmailConfirmationStatus = (dbContent: IWishListDb, userEmail: Email, status: boolean) => {
+    const userId = getUserIdByEmail(dbContent, userEmail)
+    dbContent.users.forEach((user: IUserRow) => {
+        if (user.userId === userId) {
+            user.isEmailConfirmed = status
+            return
+        }
+    })
+}
+
 export const getUserDataByUserId = (dbContent: IWishListDb, userId: UserId): IUserRow | null => {
     const user = dbContent.users.find((user: IUserRow) => user.userId === userId)
     return user ? user : null
@@ -213,11 +242,6 @@ export const addUserToRoom = (dbContent: IWishListDb, roomId: RoomId, addableUse
         }
     })
 
-}
-
-export const getRoomIdByCreaterId = (dbContent: IWishListDb, roomCreatorId: UserId): string | null => {
-    const room = dbContent.rooms.find((room: IRoomRow) => room.creatorId === roomCreatorId)
-    return room ? room.roomId : null
 }
 
 export const getAllRoomsOfUser = (dbContent: IWishListDb, userId: UserId): IRoomRow[] => {

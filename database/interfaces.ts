@@ -17,6 +17,9 @@ export interface IUserRow {
     userId: string
     username: string | null
     email: string
+    isEmailConfirmed: boolean
+    password: string | null
+    passwordSalt: string | null
 }
 
 export interface IWishRow {
@@ -35,5 +38,5 @@ export interface ISessionRow {
 
 export interface IAuthRequestRow {
     email: string
-    token: string
+    token: string | null
 }
