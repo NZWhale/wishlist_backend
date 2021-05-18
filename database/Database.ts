@@ -60,7 +60,7 @@ export default class WishListFileDatabase {
     async authoriseUserViaToken(token: string) {
         const dbContent = await this.readDbContent()
         const userEmail = getUserEmailFromAuthRequests(dbContent, token)
-        if(!userEmail){
+        if (!userEmail) {
             throw new Error('token is invalid')
         }
         const userData = getUserData(dbContent, userEmail)
@@ -80,26 +80,26 @@ export default class WishListFileDatabase {
 
     async authoriseUserByLoginAndPassword(email: string, password: string) {
         const dbContent = await this.readDbContent()
-        if(!isEmailExistInDb(dbContent, email)){
+        if (!isEmailExistInDb(dbContent, email)) {
             throw new Error("Email or password is not valid")
         }
         const user = getUserData(dbContent, email)
-        if(!user){
+        if (!user) {
             throw new Error("user doesn't exist in database")
         }
-        if(!user.password){
+        if (!user.password) {
             throw new Error("User doesn't have password")
         }
         const match = await bcrypt.compare(password, user.password)
-        if(!match){
+        if (!match) {
             throw new Error("Email or password is not valid")
         }
         const userId = getUserIdByEmail(dbContent, email)
-        if(!userId){
+        if (!userId) {
             console.error(`userId doesnt exist in database after email and password validation. UserId: ${userId}`)
             throw new Error("Something goes wrong")
         }
-        if(isSessionExist(dbContent, userId)){
+        if (isSessionExist(dbContent, userId)) {
             deleteSessionFromDb(dbContent, userId)
         }
         const cookie = createRandomId(cookieLength, userId)
@@ -108,20 +108,20 @@ export default class WishListFileDatabase {
         return cookie
     }
 
-    async registrationViaLoginAndPassword(email: string, password: string){
+    async registrationViaLoginAndPassword(email: string, password: string) {
         const dbContent = await this.readDbContent()
-        if(isEmailExistInDb(dbContent, email)){
+        if (isEmailExistInDb(dbContent, email)) {
             throw new Error("Email already exist")
         }
         const userId = createRandomId(userIdLength, email)
         const confirmationCode = createRandomId(confirmationCodeLength, email)
         bcrypt.genSalt(saltLength, (err, salt) => {
-            if(err){
+            if (err) {
                 console.error(err)
                 throw new Error("Something goes wrong with salt generating")
             }
             bcrypt.hash(password, salt, async (err, hash) => {
-                if(err){
+                if (err) {
                     console.error(err)
                     throw new Error("Something goes wrong with hash generating")
                 }
@@ -133,21 +133,21 @@ export default class WishListFileDatabase {
         return confirmationCode
     }
 
-    async emailConfirmation(confirmationCode: string){
+    async emailConfirmation(confirmationCode: string) {
         const dbContent = await this.readDbContent()
         const isAuthRequestExist = isAuthRequestExistByToken(dbContent, confirmationCode)
-        if(!isAuthRequestExist){
+        if (!isAuthRequestExist) {
             throw new Error("Your confirmation link has expired")
         }
         const userEmail = getUserEmailFromAuthRequests(dbContent, confirmationCode)
-        if(!userEmail){
+        if (!userEmail) {
             throw new Error("Your confirmation link is invalid")
         }
         const userData = getUserData(dbContent, userEmail)
-        if(!userData){
+        if (!userData) {
             throw new Error("Your confirmation link is invalid")
         }
-        if(userData.isEmailConfirmed){
+        if (userData.isEmailConfirmed) {
             throw new Error("Your email already confirmed")
         }
         setEmailConfirmationStatus(dbContent, userEmail, true)
@@ -168,6 +168,16 @@ export default class WishListFileDatabase {
         await this.writeDbContent(dbContent)
     }
 
+    async deleteCookie(cookie: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) {
+            throw new Error("User doesn't exist in database")
+        }
+        deleteSessionFromDb(dbContent, userId)
+        await this.writeDbContent(dbContent)
+    }
+
     async getUsernameByCookie(cookie: string): Promise<string | null> {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
@@ -176,7 +186,7 @@ export default class WishListFileDatabase {
         }
         return getUsernameByUserId(dbContent, userId)
     }
-    
+
     async getAllWishesOfLoggedInUser(cookie: string) {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
@@ -234,7 +244,7 @@ export default class WishListFileDatabase {
         await this.writeDbContent(dbContent)
     }
 
-    async addUserToRoomViaLink(cookie: string, roomId: string){
+    async addUserToRoomViaLink(cookie: string, roomId: string) {
         const dbContent = await this.readDbContent()
         const userId = getUserIdByCookie(dbContent, cookie)
         if (!userId) throw new Error("User doesn't exist in database")

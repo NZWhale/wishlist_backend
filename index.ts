@@ -18,6 +18,7 @@ import addUserViaLinkHandler from "./handlers/addUserViaLinkHandler/addUserViaLi
 import registrationHandler from "./handlers/registrationHandler/registrationHandler";
 import regularAuthoriseHandler from "./handlers/authoriseHandler/regularAuthoriseHandler";
 import emailConfirmationHandler from "./handlers/emailConfirmationHandler/emailConfirmationHandler";
+import deleteCookieHandler from "./handlers/deleteCookieHandler/deleteCookieHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -35,6 +36,8 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json())
 
 app.get('/getstatus', statusHandler)
+
+app.get('/deletecookie', deleteCookieHandler)
 
 app.get('/getAllWishes', getWishesOfLoggedInUserHandler)
 
