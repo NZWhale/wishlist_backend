@@ -26,7 +26,7 @@ export interface IWishRow {
     userId: string
     wishId: string
     title: string
-    description: string
+    description: string | null
     isPublic: boolean | string[]
 }
 

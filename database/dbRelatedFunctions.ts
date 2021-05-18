@@ -158,7 +158,7 @@ export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, titl
         userId: userId,
         wishId: createRandomId(wishIdLength, title),
         title: title,
-        description: description,
+        description: description?description:"",
         isPublic: isPublic
     }
     dbContent.wishes.push(wishRow)
