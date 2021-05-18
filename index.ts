@@ -1,5 +1,5 @@
-import { port } from "./addresses";
-import authoriseHandler from "./handlers/authoriseHandler/authoriseHandler";
+import {domainUrl, port} from "./addresses";
+import authoriseViaMagicCodeHandler from "./handlers/authoriseHandler/authoriseViaMagicCodeHandler";
 import magicLinkHandler from "./handlers/magicLinkHandler/magicLinkHandler";
 import statusHandler from "./handlers/statusHandler/statusHandler"
 import addNewWishHandler from "./handlers/addNewWishHandler/addNewWishHandler";
@@ -15,6 +15,10 @@ import getAllRoomsOfLoggedInUserHandler from "./handlers/getAllRoomsOfLoggedInUs
 import getWishesByUserIdHandler from "./handlers/getWishesByUserIdHandler/getWishesByUserIdHandler";
 import getUsernameByUserIdHandler from "./handlers/getUsernameByUserIdHandler/getUsernameByUserIdHandler";
 import addUserViaLinkHandler from "./handlers/addUserViaLinkHandler/addUserViaLinkHandler";
+import registrationHandler from "./handlers/registrationHandler/registrationHandler";
+import regularAuthoriseHandler from "./handlers/authoriseHandler/regularAuthoriseHandler";
+import emailConfirmationHandler from "./handlers/emailConfirmationHandler/emailConfirmationHandler";
+import deleteCookieHandler from "./handlers/deleteCookieHandler/deleteCookieHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -33,6 +37,8 @@ app.use(bodyParser.json())
 
 app.get('/getstatus', statusHandler)
 
+app.get('/deletecookie', deleteCookieHandler)
+
 app.get('/getAllWishes', getWishesOfLoggedInUserHandler)
 
 app.get('/getPublicWishes/:username', getPublicWishesHandler)
@@ -43,6 +49,12 @@ app.get('/getUsernameByUserId/:userId', getUsernameByUserIdHandler)
 
 app.get('/getAllRooms', getAllRoomsOfLoggedInUserHandler)
 
+app.post('/emailConfirmation', emailConfirmationHandler)
+
+app.post('/registration', registrationHandler)
+
+app.post('/authorise', regularAuthoriseHandler)
+
 app.post('/createRoom', createRoomHandler)
 
 app.post('/addUserToRoom', addUserToRoomHandler)
@@ -51,7 +63,7 @@ app.post('/addUserViaLink', addUserViaLinkHandler)
 
 app.post('/create-magic-link', magicLinkHandler)
 
-app.post('/authorise', authoriseHandler)
+app.post('/authoriseViaMagicCode', authoriseViaMagicCodeHandler)
 
 app.post('/addNewWish', addNewWishHandler )
 
@@ -65,5 +77,5 @@ app.get('/getUsername', getUsernameHandler)
 
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`App listening at http://${domainUrl}:${port}`)
 })

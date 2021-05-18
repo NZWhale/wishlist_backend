@@ -17,13 +17,16 @@ export interface IUserRow {
     userId: string
     username: string | null
     email: string
+    isEmailConfirmed: boolean
+    password: string | null
+    passwordSalt: string | null
 }
 
 export interface IWishRow {
     userId: string
     wishId: string
     title: string
-    description: string
+    description: string | null
     isPublic: boolean | string[]
 }
 
@@ -35,5 +38,5 @@ export interface ISessionRow {
 
 export interface IAuthRequestRow {
     email: string
-    token: string
+    token: string | null
 }

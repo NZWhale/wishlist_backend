@@ -2,7 +2,7 @@ import express from "express"
 import {cookieAge, databasePath, domainUrl} from "../../addresses"
 import WishListFileDatabase from "../../database/Database";
 
-const authoriseHandler = (req: express.Request, res: express.Response) => {
+const authoriseViaMagicCodeHandler = (req: express.Request, res: express.Response) => {
     const token = req.body.token
     if (typeof (token) !== 'string' || !token) {
         res.status(500).send("Token doesn't exist in the request")
@@ -10,16 +10,16 @@ const authoriseHandler = (req: express.Request, res: express.Response) => {
     }
 
     const dbInstance = new WishListFileDatabase(databasePath)
-    dbInstance.authoriseUser(token)
+    dbInstance.authoriseUserViaToken(token)
         .then((data: string) => {
             res.cookie('auth-token', data, {domain: domainUrl, maxAge: cookieAge, httpOnly: false})
             res.status(200).send()
         })
         .catch((err: Error) => {
+            console.error(err)
             res.status(500).send(err)
-            console.log(err)
         })
 }
 
 
-export default authoriseHandler
+export default authoriseViaMagicCodeHandler

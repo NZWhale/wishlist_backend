@@ -30,7 +30,7 @@ describe("authoriseUser", () => {
             encoding: "utf-8"
         });
         expect(fileContentAfterCreatingMagicId).toMatchSnapshot()
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         expect(cookie).toBe('xx420@chill.comxxx')
         const fileContentAfterAuthoriseUser = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
@@ -47,7 +47,7 @@ describe("addNewWish", () => {
             encoding: "utf-8"
         });
         expect(fileContentAfterCreatingMagicId).toMatchSnapshot()
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         await db.addNewWish(cookie, 'Foo', 'Bar', true)
         const fileContentAfterAddingWish = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
@@ -60,7 +60,7 @@ describe("deleteWish", () => {
     test("should delete wish row from wishes table", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
         const magicId = await db.createMagicId("420@chill.com")
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         await db.addNewWish(cookie, 'Foo', 'Bar', true)
         const fileContentAfterAddingWish = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
@@ -78,7 +78,7 @@ describe("editWish", () => {
     test("should edit wish row", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
         const magicId = await db.createMagicId("420@chill.com")
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         await db.addNewWish(cookie, 'Foo', 'Bar', true)
         const fileContentAfterAddingWish = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
@@ -100,7 +100,7 @@ describe("getWishes", () => {
     test("should return all wishes of loggedIn user", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
         const magicId = await db.createMagicId("420@chill.com")
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         await db.addNewWish(cookie, 'Foo', 'Bar', true)
         await db.addNewWish(cookie, 'Bar', 'Foo', true)
         const fileContentAfterAddingWish = await fs.promises.readFile(dbFilePath, {
@@ -113,7 +113,7 @@ describe("getWishes", () => {
     test('should return public wishes of user', async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
         const magicId = await db.createMagicId("420@chill.com")
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         await db.setUsername(cookie, 'FooUser')
         await db.addNewWish(cookie, 'Foo', 'Bar', true)
         await db.addNewWish(cookie, 'Private', 'Foo', false)
@@ -132,7 +132,7 @@ describe("setUsername", () => {
     test("should set username", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
         const magicId = await db.createMagicId("420@chill.com")
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         const fileContentAfterCreatingUser = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
@@ -149,7 +149,7 @@ describe("getUsername", () => {
     test("should return username", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
         const magicId = await db.createMagicId("420@chill.com")
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         await db.setUsername(cookie, 'foobar')
         const fileContentAfterAddingUsername = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
@@ -164,7 +164,7 @@ describe("createRoom", () => {
     test("should create new room in database", async () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
         const magicId = await db.createMagicId("420@chill.com")
-        const cookie = await db.authoriseUser(magicId)
+        const cookie = await db.authoriseUserViaToken(magicId)
         const fileContentAfterAuthorise = await fs.promises.readFile(dbFilePath, {
             encoding: "utf-8"
         });
@@ -182,13 +182,13 @@ describe("addUserToRoom", () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
 
         const magicId1 = await db.createMagicId("420@chill.com")
-        const cookie1 = await db.authoriseUser(magicId1)
+        const cookie1 = await db.authoriseUserViaToken(magicId1)
         await db.setUsername(cookie1, 'Vasiliy')
 
         await db.createRoom(cookie1, "DoobkiRoom")
 
         const magicId2 = await db.createMagicId("bumpie@gmail.com");
-        const cookie2 = await db.authoriseUser(magicId2)
+        const cookie2 = await db.authoriseUserViaToken(magicId2)
         await db.setUsername(cookie2, 'bumpie')
 
         const fileContentAfterCreatingRoom = await fs.promises.readFile(dbFilePath, {
@@ -212,7 +212,7 @@ describe("getRoomsOfUser", () => {
         const {db, dbFilePath} = createEmptyTestDatabase()
 
         const magicId1 = await db.createMagicId("420@chill.com")
-        const cookie1 = await db.authoriseUser(magicId1)
+        const cookie1 = await db.authoriseUserViaToken(magicId1)
         await db.setUsername(cookie1, 'foobar')
 
         await db.createRoom(cookie1, "DoobkiRoom")
