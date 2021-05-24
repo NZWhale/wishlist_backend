@@ -32,7 +32,7 @@ export interface IWishRow {
 
 export interface ISessionRow {
     userId: string
-    cookie: string
+    cookie: string[]
 }
 
 
