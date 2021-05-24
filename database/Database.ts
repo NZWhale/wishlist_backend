@@ -21,7 +21,6 @@ import {
     getUsernameByUserId,
     isAuthRequestExist,
     isAuthRequestExistByToken, isEmailExistInDb,
-    isSessionExist,
     isUserExist,
     returnWishIndex, setEmailConfirmationStatus,
     setUsername
@@ -69,9 +68,10 @@ export default class WishListFileDatabase {
         if (isAuthRequestExistByToken(dbContent, token)) {
             deleteContentFromDb(dbContent, 'authRequests', userEmail)
         }
-        if (isSessionExist(dbContent, userData.userId)) {
-            deleteContentFromDb(dbContent, 'sessions', userEmail)
-        }
+        //TODO: resolve this exception
+        // if (isSessionExist(dbContent, userData.userId)) {
+        //     deleteContentFromDb(dbContent, 'sessions', userEmail)
+        // }
         createSessionRecord(dbContent, userData.userId, cookie)
         setEmailConfirmationStatus(dbContent, userEmail, true)
         await this.writeDbContent(dbContent)
