@@ -201,6 +201,10 @@ export const setUsername = (dbContent: IWishListDb, userId: UserId, username: st
         }
     })
 }
+export const isUsernameBusy = (dbContent: IWishListDb, username: string): boolean => {
+    const result = dbContent.users.find((user: IUserRow) => user.username === username)
+    return !!result
+}
 
 export const setEmailConfirmationStatus = (dbContent: IWishListDb, userEmail: Email, status: boolean) => {
     const userId = getUserIdByEmail(dbContent, userEmail)

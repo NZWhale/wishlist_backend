@@ -21,7 +21,7 @@ import {
     getUsernameByUserId,
     isAuthRequestExist,
     isAuthRequestExistByToken, isEmailExistInDb,
-    isUserExist,
+    isUserExist, isUsernameBusy,
     returnWishIndex, setEmailConfirmationStatus,
     setUsername
 } from "./dbRelatedFunctions";
@@ -164,6 +164,9 @@ export default class WishListFileDatabase {
         const userId = getUserIdByCookie(dbContent, cookie)
         if (!userId) {
             throw new Error("User doesn't exist in database")
+        }
+        if(isUsernameBusy(dbContent, username)){
+            throw new Error('Username is busy')
         }
         setUsername(dbContent, userId, username)
         await this.writeDbContent(dbContent)
