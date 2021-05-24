@@ -31,11 +31,22 @@ export const createUserRecord = (dbContent: IWishListDb, userId: UserId, userEma
 }
 
 export const createSessionRecord = (dbContent: IWishListDb, userId: UserId, cookie: Cookie) => {
+    if(!isSessionExist(dbContent,userId)){
     const sessionRecord: ISessionRow = {
         userId: userId,
-        cookie: cookie
+        cookie: [cookie]
     }
     dbContent.sessions.push(sessionRecord)
+    }
+    addCookieToSessionRow(dbContent, userId, cookie)
+}
+
+export const addCookieToSessionRow = (dbContent: IWishListDb, userId: UserId, cookie: Cookie) => {
+    dbContent.sessions.forEach((session: ISessionRow) => {
+        if(session.userId === userId){
+            session.cookie.push(cookie)
+        }
+    })
 }
 
 export const isAuthRequestExist = (dbContent: IWishListDb, email: Email) => {
@@ -76,7 +87,7 @@ export const getUserIdFromDb = (dbContent: IWishListDb, email: Email): string | 
 }
 
 export const getUserIdByCookie = (dbContent: IWishListDb, cookie: Cookie): string | null => {
-    const result = dbContent.sessions.find((session: ISessionRow) => session.cookie === cookie)
+    let result = dbContent.sessions.find((session: ISessionRow) => session.cookie.find((iterativeCookie: string) => cookie === iterativeCookie))
     return result ? result.userId : null
 }
 
@@ -125,8 +136,12 @@ export const getPublicWishesByUserId = (dbContent: IWishListDb, userId: UserId):
     return publicWishes
 }
 
-export const deleteSessionFromDb = (dbContent: IWishListDb, userId: UserId) => {
-    const sessionIndex = dbContent.sessions.findIndex((session: ISessionRow) => session.userId === userId)
+export const deleteCookieFromSessionRow = (dbContent: IWishListDb, userId: UserId, cookie: Cookie) => {
+    const sessionIndex = dbContent.sessions.findIndex((session: ISessionRow) => {
+        if(session.userId === userId){
+            session.cookie.findIndex((iterativeCookie: Cookie) => iterativeCookie === cookie)
+        }
+    })
     dbContent.sessions.splice(sessionIndex, 1)
 }
 

@@ -8,7 +8,7 @@ import {
     createNewWishRecord,
     createSessionRecord,
     createUserRecord, deleteAuthRequestFromTable,
-    deleteContentFromDb, deleteSessionFromDb,
+    deleteContentFromDb, deleteCookieFromSessionRow,
     deleteWishRecord,
     editWishRecord,
     getAllRoomsOfUser,
@@ -99,9 +99,10 @@ export default class WishListFileDatabase {
             console.error(`userId doesnt exist in database after email and password validation. UserId: ${userId}`)
             throw new Error("Something goes wrong")
         }
-        if (isSessionExist(dbContent, userId)) {
-            deleteSessionFromDb(dbContent, userId)
-        }
+        //TODO: resolve this exception
+        // if (isSessionExist(dbContent, userId)) {
+        //     deleteSessionFromDb(dbContent, userId)
+        // }
         const cookie = createRandomId(cookieLength, userId)
         createSessionRecord(dbContent, userId, cookie)
         await this.writeDbContent(dbContent)
@@ -174,7 +175,7 @@ export default class WishListFileDatabase {
         if (!userId) {
             throw new Error("User doesn't exist in database")
         }
-        deleteSessionFromDb(dbContent, userId)
+        deleteCookieFromSessionRow(dbContent, userId, cookie)
         await this.writeDbContent(dbContent)
     }
 
