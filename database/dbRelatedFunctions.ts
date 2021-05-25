@@ -251,7 +251,11 @@ export const addUserToRoom = (dbContent: IWishListDb, roomId: RoomId, addableUse
     if (!user) {
         throw new Error("User doesn't exist")
     }
-    const isUserExist = dbContent.rooms.find((room: IRoomRow) => room.users.find((user: string) => user === addableUserId))
+    const isUserExist = dbContent.rooms.find((room: IRoomRow) => {
+        if(room.roomId === roomId){
+            return room.users.find((user: string) => user === addableUserId)
+        }
+    })
     if(isUserExist){
         throw new Error('User already in the room')
     }
