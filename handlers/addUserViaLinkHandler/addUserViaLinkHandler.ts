@@ -13,7 +13,7 @@ const addUserViaLinkHandler = (req: express.Request, res: express.Response) => {
         res.status(401).send("room is not provided")
         return
     }
-
+    console.log(cookie, roomId)
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.addUserToRoomViaLink(cookie, roomId)
         .then(() => {

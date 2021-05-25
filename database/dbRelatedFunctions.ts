@@ -173,7 +173,7 @@ export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, titl
         userId: userId,
         wishId: createRandomId(wishIdLength, title),
         title: title,
-        description: description?description:"",
+        description: description?description:null,
         isPublic: isPublic
     }
     dbContent.wishes.push(wishRow)
@@ -200,6 +200,10 @@ export const setUsername = (dbContent: IWishListDb, userId: UserId, username: st
             return
         }
     })
+}
+export const isUsernameBusy = (dbContent: IWishListDb, username: string): boolean => {
+    const result = dbContent.users.find((user: IUserRow) => user.username === username)
+    return !!result
 }
 
 export const setEmailConfirmationStatus = (dbContent: IWishListDb, userEmail: Email, status: boolean) => {
@@ -247,7 +251,11 @@ export const addUserToRoom = (dbContent: IWishListDb, roomId: RoomId, addableUse
     if (!user) {
         throw new Error("User doesn't exist")
     }
-    const isUserExist = dbContent.rooms.find((room: IRoomRow) => room.users.find((user: string) => user === addableUserId))
+    const isUserExist = dbContent.rooms.find((room: IRoomRow) => {
+        if(room.roomId === roomId){
+            return room.users.find((user: string) => user === addableUserId)
+        }
+    })
     if(isUserExist){
         throw new Error('User already in the room')
     }

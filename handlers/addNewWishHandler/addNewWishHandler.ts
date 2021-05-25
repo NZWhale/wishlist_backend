@@ -14,10 +14,6 @@ const addNewWishHandler = (req: express.Request, res: express.Response) => {
         return
     }
     const description = req.body.description
-    if(!description){
-        res.status(401).send("Description doesn't provide")
-        return
-    }
     let isPublic = req.body.isPublic
     const dbInstance = new WishListFileDatabase(databasePath)
     dbInstance.addNewWish(cookie, title, description, isPublic)
