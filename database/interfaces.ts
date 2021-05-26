@@ -10,11 +10,18 @@ export interface IRoomRow {
     creatorId: string
     roomId: string
     roomName: string
-    users: string[]
+    roomUsers: IWishesPage[]
 }
 
+interface IWishesPage {
+    userId: string,
+    userPageId: string,
+    viewedBySinceLastUpdate: UserId[]
+}
+
+type UserId = string
 export interface IUserRow {
-    userId: string
+    userId: UserId
     username: string | null
     email: string
     isEmailConfirmed: boolean
@@ -28,13 +35,13 @@ export interface IWishRow {
     title: string
     description: string | null
     isPublic: boolean | string[]
+    updatedAt: string
 }
 
 export interface ISessionRow {
     userId: string
     cookie: string[]
 }
-
 
 export interface IAuthRequestRow {
     email: string
