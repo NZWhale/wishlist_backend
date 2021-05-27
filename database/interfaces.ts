@@ -10,8 +10,17 @@ export interface IRoomRow {
     creatorId: string
     roomId: string
     roomName: string
+    //TODO: later, when you realise update indicator, here should be array of IWishesPage
     users: string[]
 }
+
+interface IWishesPage {
+    userId: string,
+    userPageId: string,
+    viewedBySinceLastUpdate: UserId[]
+}
+
+type UserId = string
 
 export interface IUserRow {
     userId: string
