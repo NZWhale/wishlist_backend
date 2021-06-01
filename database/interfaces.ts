@@ -3,8 +3,14 @@ export interface IWishListDb {
     users: IUserRow[],
     sessions: ISessionRow[],
     wishes: IWishRow[],
-    authRequests: IAuthRequestRow[]
+    authRequests: IAuthRequestRow[],
+    recoveryCodes: IRecoveryCodeRow[]
   }
+
+export interface IRecoveryCodeRow {
+    userId: string,
+    recoveryCode: string
+}
 
 export interface IRoomRow {
     creatorId: string

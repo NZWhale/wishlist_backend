@@ -20,6 +20,8 @@ import regularAuthoriseHandler from "./handlers/authoriseHandler/regularAuthoris
 import emailConfirmationHandler from "./handlers/emailConfirmationHandler/emailConfirmationHandler";
 import deleteCookieHandler from "./handlers/deleteCookieHandler/deleteCookieHandler";
 import changePasswordHandler from "./handlers/changePasswordHandler/changePasswordHandler";
+import recoveryCodeValidationHandler from "./handlers/recoveryCodeValidationHandler/recoveryCodeValidationHandler";
+import sendRecoveryLinkHandler from "./handlers/sendRecoveryLinkHandler/sendRecoveryLinkHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -51,6 +53,10 @@ app.get('/getUsernameByUserId/:userId', getUsernameByUserIdHandler)
 app.get('/getAllRooms', getAllRoomsOfLoggedInUserHandler)
 
 app.post('/changePassword', changePasswordHandler)
+
+app.post('/generateRecoveryLink', sendRecoveryLinkHandler)
+
+app.post('/codeValidationHandler', recoveryCodeValidationHandler)
 
 app.post('/emailConfirmation', emailConfirmationHandler)
 

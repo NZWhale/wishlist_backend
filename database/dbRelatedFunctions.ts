@@ -1,5 +1,5 @@
 import {IAuthRequestRow, ISessionRow, IUserRow, IWishRow, IWishListDb, IRoomRow} from "./interfaces";
-import {roomIdLength, wishIdLength} from "../addresses";
+import {recoveryCodeLength, roomIdLength, wishIdLength} from "../addresses";
 import createRandomId from "../createRandomId";
 
 type Email = string
@@ -57,6 +57,14 @@ export const addCookieToSessionRow = (dbContent: IWishListDb, userId: UserId, co
     })
 }
 
+export const deleteRecoveryCore = (dbContent: IWishListDb, recoveryCode: string, userId: UserId) => {
+    const codeIndexInRow = dbContent.recoveryCodes.findIndex(codeRow => codeRow.recoveryCode === recoveryCode && codeRow.userId === userId)
+    if(codeIndexInRow === -1){
+        throw new Error('userId or code is not valide')
+    }
+    dbContent.recoveryCodes.splice(codeIndexInRow, 1)
+}
+
 export const isAuthRequestExist = (dbContent: IWishListDb, email: Email) => {
     const result = dbContent.authRequests.findIndex((authRequest: IAuthRequestRow) => authRequest.email === email)
     return result !== -1
@@ -97,6 +105,15 @@ export const getUserIdFromDb = (dbContent: IWishListDb, email: Email): string | 
 export const getUserIdByCookie = (dbContent: IWishListDb, cookie: Cookie): string | null => {
     let result = dbContent.sessions.find((session: ISessionRow) => session.cookie.find((iterativeCookie: string) => cookie === iterativeCookie))
     return result ? result.userId : null
+}
+
+export const generateRecoveryCode = (dbContent: IWishListDb, userId: UserId) => {
+    const recoveryCode = createRandomId(recoveryCodeLength, userId)
+    dbContent.recoveryCodes.push({
+        userId: userId,
+        recoveryCode: recoveryCode
+    })
+    return recoveryCode
 }
 
 export const getUsernameByUserId = (dbContent: IWishListDb, userId: UserId): string | null => {
@@ -277,6 +294,7 @@ export const createEmptyDbContent = (): IWishListDb => {
         "users": [],
         "sessions": [],
         "wishes": [],
-        "authRequests": []
+        "authRequests": [],
+        "recoveryCodes": []
     }
 }

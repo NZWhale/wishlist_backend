@@ -1,23 +1,19 @@
-import {confirmationUrl, databasePath} from "../../addresses";
+import { databasePath} from "../../addresses";
 import WishListFileDatabase from "../../database/Database";
 import sendMagicLink from "../magicLinkHandler/sendMagicLink";
+import express from "express";
 
-const registrationHandler = async (req: any, res: any) => {
+const sendRecoveryLinkHandler = (req: express.Request, res: express.Response) => {
     const email = req.body.email.toLowerCase()
-    console.log(email)
-    if(!email){
+    if(typeof (email) !== 'string' || !email){
         res.status(500).send('Email or password is not valid')
         return
     }
-    const password = req.body.password
-    console.log(password)
-    if(!password){
-        res.status(500).send('Email or password is not valid')
-    }
+    console.log(email)
     const dbInstance = new WishListFileDatabase(databasePath)
-    dbInstance.registrationViaLoginAndPassword(email, password)
+    dbInstance.createRecoveryLink(email)
         .then((data: string) => {
-            sendMagicLink(email, confirmationUrl+data)
+            sendMagicLink(email, data)
                 .then(() => {
                     res.status(200).send()
                 })
@@ -34,4 +30,4 @@ const registrationHandler = async (req: any, res: any) => {
 
 
 
-export default registrationHandler
+export default sendRecoveryLinkHandler

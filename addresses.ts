@@ -1,6 +1,7 @@
-export const domainUrl = '127.0.0.1'
+export const domainUrl = '127.0.0.1:3000'
 export const databasePath = './data/WishListDB.json'
-export const confirmationUrl = '127.0.0.1:3000/confirmation/'
+export const confirmationUrl = `${domainUrl}/confirmation/`
+export const passwordRecoveryUrl = `${domainUrl}/passRecovery/`
 
 export const port = "3001"
 export const userIdLength = 10
@@ -9,5 +10,6 @@ export const wishIdLength = 8
 export const roomIdLength = 12
 export const magicIdLength = 3
 export const confirmationCodeLength = 11
-export const saltLength = 10;
+export const saltLength = 10
+export const recoveryCodeLength = 24
 export const cookieAge = 24 * 60 * 60 * 1000 * 100
