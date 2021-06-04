@@ -1,6 +1,7 @@
 import fs from "fs"
-import {IWishListDb} from "./interfaces";
+import {IRecoveryCodeRow, IWishListDb} from "./interfaces";
 import {
+    addCookieToSessionRow,
     addUserToRoom,
     createAuthRequestRecord,
     createEmptyDbContent,
@@ -8,21 +9,21 @@ import {
     createNewWishRecord,
     createSessionRecord,
     createUserRecord, deleteAuthRequestFromTable,
-    deleteContentFromDb, deleteCookieFromSessionRow,
+    deleteCookieFromSessionRow, deleteRecoveryCore,
     deleteWishRecord,
-    editWishRecord,
+    editWishRecord, generateRecoveryCode,
     getAllRoomsOfUser,
     getAllWishesOfLoggedInUser,
     getPublicWishesByUserId,
-    getUserData,
+    getUserData, getUserDataByUserId,
     getUserEmailFromAuthRequests,
     getUserIdByCookie, getUserIdByEmail,
     getUserIdByUsername,
     getUsernameByUserId,
     isAuthRequestExist,
-    isAuthRequestExistByToken, isEmailExistInDb,
+    isAuthRequestExistByToken, isEmailExistInDb, isSessionExist,
     isUserExist, isUsernameBusy,
-    returnWishIndex, setEmailConfirmationStatus,
+    returnWishIndex, setEmailConfirmationStatus, setNewPassword,
     setUsername
 } from "./dbRelatedFunctions";
 import {confirmationCodeLength, cookieLength, magicIdLength, saltLength, userIdLength} from "../addresses";
@@ -41,7 +42,7 @@ export default class WishListFileDatabase {
     async createMagicId(userEmail: string): Promise<string> {
         const dbContent = await this.readDbContent()
         if (isAuthRequestExist(dbContent, userEmail)) {
-            deleteContentFromDb(dbContent, 'authRequests', userEmail)
+            deleteAuthRequestFromTable(dbContent, userEmail)
         }
         const nanoId = customAlphabet(uppercase, magicIdLength)
         const firstHalfOfId = await nanoId()
@@ -66,7 +67,7 @@ export default class WishListFileDatabase {
         if (!userData) throw new Error("User doesn't exist in database")
         const cookie = createRandomId(cookieLength, token)
         if (isAuthRequestExistByToken(dbContent, token)) {
-            deleteContentFromDb(dbContent, 'authRequests', userEmail)
+            deleteAuthRequestFromTable(dbContent, userEmail)
         }
         //TODO: resolve this exception
         // if (isSessionExist(dbContent, userData.userId)) {
@@ -165,7 +166,7 @@ export default class WishListFileDatabase {
         if (!userId) {
             throw new Error("User doesn't exist in database")
         }
-        if(isUsernameBusy(dbContent, username)){
+        if (isUsernameBusy(dbContent, username)) {
             throw new Error('Username is busy')
         }
         setUsername(dbContent, userId, username)
@@ -226,11 +227,103 @@ export default class WishListFileDatabase {
     async addUserToRoom(cookie: string, roomId: string, email: string) {
         const dbContent = await this.readDbContent()
         const roomCreatorId = getUserIdByCookie(dbContent, cookie)
-        if (!roomCreatorId) throw new Error("User doesn't exist in database")
+        if (!roomCreatorId) {
+            throw new Error("User doesn't exist in database")
+        }
         const addableUserId = getUserIdByEmail(dbContent, email)
-        if (!addableUserId) throw new Error("User doesn't exist in database")
+        if (!addableUserId) {
+            throw new Error("User doesn't exist in database")
+        }
         addUserToRoom(dbContent, roomId, addableUserId)
         await this.writeDbContent(dbContent)
+    }
+
+    async createRecoveryLink(email: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByEmail(dbContent, email)
+        if (!userId) {
+            throw new Error("User doesn't exist in database")
+        }
+        const recoveryCode = generateRecoveryCode(dbContent, userId)
+        await this.writeDbContent(dbContent)
+        return recoveryCode
+    }
+
+    async recoveryCodeValidation(recoveryCode: string, userId: string) {
+        const dbContent = await this.readDbContent()
+        const isRecoveryCodeValid = dbContent.recoveryCodes.findIndex((recoveryCodeRow: IRecoveryCodeRow) => recoveryCodeRow.recoveryCode === recoveryCode && recoveryCodeRow.userId === userId)
+        if (isRecoveryCodeValid === -1) {
+            throw new Error("Recovery code doesn't pass validation")
+        }
+        const cookie = createRandomId(cookieLength, userId)
+        addCookieToSessionRow(dbContent, userId, cookie)
+        deleteRecoveryCore(dbContent, recoveryCode, userId)
+        await this.writeDbContent(dbContent)
+        return cookie
+    }
+
+    async setNewPassword(cookie: string, newPassword: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) {
+            throw new Error("User doesn't exist")
+        }
+        const userData = getUserDataByUserId(dbContent, userId)
+        if (!userData) {
+            throw new Error("There is no userData with the corresponding userId")
+        }
+        if (!isSessionExist(dbContent, userId)) {
+            throw new Error('Ivalide cookie')
+        }
+        bcrypt.genSalt(saltLength, (err, salt) => {
+            if (err) {
+                console.error(err)
+                throw new Error("Something goes wrong with salt generating")
+            }
+            bcrypt.hash(newPassword, salt, async (err, hash) => {
+                if (err) {
+                    console.error(err)
+                    throw new Error("Something goes wrong with hash generating")
+                }
+                setNewPassword(dbContent, userId, hash, salt)
+                await this.writeDbContent(dbContent)
+            });
+        });
+        return userData.username
+    }
+
+    async changePassword(cookie: string, oldPassword: string, newPassword: string) {
+        const dbContent = await this.readDbContent()
+        const userId = getUserIdByCookie(dbContent, cookie)
+        if (!userId) {
+            throw new Error("User doesn't exist in database")
+        }
+        const userData = getUserDataByUserId(dbContent, userId)
+        if (!userData) {
+            throw new Error("There is no userData with the corresponding userId")
+        }
+        if (!userData.password) {
+            throw new Error("User doesn't have password")
+        }
+        const match = await bcrypt.compare(oldPassword, userData.password)
+        if (!match) {
+            throw new Error("Email or password is not valid")
+        }
+        bcrypt.genSalt(saltLength, (err, salt) => {
+            if (err) {
+                console.error(err)
+                throw new Error("Something goes wrong with salt generating")
+            }
+            bcrypt.hash(newPassword, salt, async (err, hash) => {
+                if (err) {
+                    console.error(err)
+                    throw new Error("Something goes wrong with hash generating")
+                }
+                setNewPassword(dbContent, userId, hash, salt)
+                await this.writeDbContent(dbContent)
+            });
+        });
+        return userData.username
     }
 
     async getRoomsOfLoggedInUser(cookie: string) {

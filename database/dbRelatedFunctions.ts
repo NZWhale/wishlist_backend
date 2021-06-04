@@ -1,5 +1,5 @@
 import {IAuthRequestRow, ISessionRow, IUserRow, IWishRow, IWishListDb, IRoomRow} from "./interfaces";
-import {roomIdLength, wishIdLength} from "../addresses";
+import {recoveryCodeLength, roomIdLength, wishIdLength} from "../addresses";
 import createRandomId from "../createRandomId";
 
 type Email = string
@@ -8,7 +8,6 @@ type WishId = string
 type Cookie = string
 type MagicId = string
 type RoomId = string
-type Table = 'authRequests' | 'sessions'
 
 export const createAuthRequestRecord = (dbContent: IWishListDb, magicId: MagicId, userEmail: Email) => {
     const authRequestRecord: IAuthRequestRow = {
@@ -30,6 +29,15 @@ export const createUserRecord = (dbContent: IWishListDb, userId: UserId, userEma
     dbContent.users.push(userRecord)
 }
 
+export const setNewPassword = (dbContent: IWishListDb, userId: UserId, hash: string, salt: string) => {
+        dbContent.users.forEach((user: IUserRow) => {
+            if(user.userId === userId){
+                user.password = hash
+                user.passwordSalt = salt
+            }
+        })
+}
+
 export const createSessionRecord = (dbContent: IWishListDb, userId: UserId, cookie: Cookie) => {
     if(!isSessionExist(dbContent,userId)){
     const sessionRecord: ISessionRow = {
@@ -47,6 +55,14 @@ export const addCookieToSessionRow = (dbContent: IWishListDb, userId: UserId, co
             session.cookie.push(cookie)
         }
     })
+}
+
+export const deleteRecoveryCore = (dbContent: IWishListDb, recoveryCode: string, userId: UserId) => {
+    const codeIndexInRow = dbContent.recoveryCodes.findIndex(codeRow => codeRow.recoveryCode === recoveryCode && codeRow.userId === userId)
+    if(codeIndexInRow === -1){
+        throw new Error('userId or code is not valide')
+    }
+    dbContent.recoveryCodes.splice(codeIndexInRow, 1)
 }
 
 export const isAuthRequestExist = (dbContent: IWishListDb, email: Email) => {
@@ -91,6 +107,15 @@ export const getUserIdByCookie = (dbContent: IWishListDb, cookie: Cookie): strin
     return result ? result.userId : null
 }
 
+export const generateRecoveryCode = (dbContent: IWishListDb, userId: UserId) => {
+    const recoveryCode = createRandomId(recoveryCodeLength, userId)
+    dbContent.recoveryCodes.push({
+        userId: userId,
+        recoveryCode: recoveryCode
+    })
+    return recoveryCode
+}
+
 export const getUsernameByUserId = (dbContent: IWishListDb, userId: UserId): string | null => {
     const username = dbContent.users.find((user: IUserRow) => user.userId === userId)
     return username ? username.username : null
@@ -122,7 +147,6 @@ export const getAllWishesOfLoggedInUser = (dbContent: IWishListDb, userId: UserI
 
 export const isEmailExistInDb = (dbContent: IWishListDb, email: Email): boolean => {
     const isEmailExist = dbContent.users.find(user => user.email === email)
-    console.log(isEmailExist)
     return !!isEmailExist
 }
 
@@ -148,24 +172,6 @@ export const deleteCookieFromSessionRow = (dbContent: IWishListDb, userId: UserI
 export const deleteAuthRequestFromTable = (dbContent: IWishListDb, email: Email) => {
     const authRequestIndex = dbContent.authRequests.findIndex((authRequest: IAuthRequestRow) => authRequest.email === email)
     dbContent.authRequests.splice(authRequestIndex, 1)
-}
-
-export const deleteContentFromDb = (dbContent: IWishListDb, table: Table, email: Email) => {
-    //TODO: create separate functions for each deleting content
-    switch (table) {
-        case 'authRequests':
-            const authRequestIndex = dbContent.authRequests.findIndex((authRequest: IAuthRequestRow) => authRequest.email === email)
-            dbContent.authRequests.splice(authRequestIndex, 1)
-            break
-        case 'sessions':
-            const userId = getUserIdFromDb(dbContent, email)
-            const sessionIndex = dbContent.sessions.findIndex((session: ISessionRow) => session.userId === userId)
-            dbContent.sessions.splice(sessionIndex, 1)
-            break
-        default:
-            return "Incorrect table"
-    }
-
 }
 
 export const createNewWishRecord = (dbContent: IWishListDb, userId: UserId, title: string, description: string, isPublic: boolean | string[]) => {
@@ -288,6 +294,7 @@ export const createEmptyDbContent = (): IWishListDb => {
         "users": [],
         "sessions": [],
         "wishes": [],
-        "authRequests": []
+        "authRequests": [],
+        "recoveryCodes": []
     }
 }
