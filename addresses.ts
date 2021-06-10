@@ -1,7 +1,8 @@
-export const domainUrl = '127.0.0.1:3000'
+export const domainUrl = '127.0.0.1'
+export const domainPort = '3000'
 export const databasePath = './data/WishListDB.json'
 export const confirmationUrl = `${domainUrl}/confirmation/`
-export const passwordRecoveryUrl = `${domainUrl}/passRecovery/`
+export const passwordRecoveryUrl = `${domainUrl}:${domainPort}/passRecovery/`
 
 export const port = "3001"
 export const userIdLength = 10

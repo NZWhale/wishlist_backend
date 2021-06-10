@@ -249,12 +249,14 @@ export default class WishListFileDatabase {
         return recoveryCode
     }
 
-    async recoveryCodeValidation(recoveryCode: string, userId: string) {
+    async recoveryCodeValidation(recoveryCode: string) {
         const dbContent = await this.readDbContent()
-        const isRecoveryCodeValid = dbContent.recoveryCodes.findIndex((recoveryCodeRow: IRecoveryCodeRow) => recoveryCodeRow.recoveryCode === recoveryCode && recoveryCodeRow.userId === userId)
-        if (isRecoveryCodeValid === -1) {
+        const recoveryCodeIndex = dbContent.recoveryCodes.findIndex((recoveryCodeRow: IRecoveryCodeRow) => recoveryCodeRow.recoveryCode === recoveryCode)
+        console.log(recoveryCodeIndex)
+        if (recoveryCodeIndex === -1) {
             throw new Error("Recovery code doesn't pass validation")
         }
+        const userId = dbContent.recoveryCodes[recoveryCodeIndex].userId
         const cookie = createRandomId(cookieLength, userId)
         addCookieToSessionRow(dbContent, userId, cookie)
         deleteRecoveryCore(dbContent, recoveryCode, userId)

@@ -22,6 +22,7 @@ import deleteCookieHandler from "./handlers/deleteCookieHandler/deleteCookieHand
 import changePasswordHandler from "./handlers/changePasswordHandler/changePasswordHandler";
 import recoveryCodeValidationHandler from "./handlers/recoveryCodeValidationHandler/recoveryCodeValidationHandler";
 import sendRecoveryLinkHandler from "./handlers/sendRecoveryLinkHandler/sendRecoveryLinkHandler";
+import setNewPasswordHandler from "./handlers/setNewPasswordHandler/setNewPasswordHandler";
 
 const express = require('express')
 const bodyParser = require('body-parser');
@@ -57,6 +58,8 @@ app.post('/changePassword', changePasswordHandler)
 app.post('/generateRecoveryLink', sendRecoveryLinkHandler)
 
 app.post('/codeValidationHandler', recoveryCodeValidationHandler)
+
+app.post('/setNewPassword', setNewPasswordHandler)
 
 app.post('/emailConfirmation', emailConfirmationHandler)
 
