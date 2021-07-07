@@ -26,7 +26,14 @@ import {
     returnWishIndex, setEmailConfirmationStatus, setNewPassword,
     setUsername
 } from "./dbRelatedFunctions";
-import {confirmationCodeLength, cookieLength, magicIdLength, saltLength, userIdLength} from "../addresses";
+import {
+    confirmationCodeLength,
+    cookieLength,
+    magicIdLength,
+    passwordRecoveryUrl,
+    saltLength,
+    userIdLength
+} from "../addresses";
 import createRandomId from "../createRandomId";
 import {customAlphabet} from "nanoid";
 import {uppercase} from "nanoid-dictionary";
@@ -246,13 +253,13 @@ export default class WishListFileDatabase {
         }
         const recoveryCode = generateRecoveryCode(dbContent, userId)
         await this.writeDbContent(dbContent)
-        return recoveryCode
+        const magicLink = passwordRecoveryUrl+recoveryCode
+        return magicLink
     }
 
     async recoveryCodeValidation(recoveryCode: string) {
         const dbContent = await this.readDbContent()
         const recoveryCodeIndex = dbContent.recoveryCodes.findIndex((recoveryCodeRow: IRecoveryCodeRow) => recoveryCodeRow.recoveryCode === recoveryCode)
-        console.log(recoveryCodeIndex)
         if (recoveryCodeIndex === -1) {
             throw new Error("Recovery code doesn't pass validation")
         }
@@ -282,6 +289,7 @@ export default class WishListFileDatabase {
                 console.error(err)
                 throw new Error("Something goes wrong with salt generating")
             }
+
             bcrypt.hash(newPassword, salt, async (err, hash) => {
                 if (err) {
                     console.error(err)
